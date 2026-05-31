@@ -111,8 +111,8 @@
           <th>Body fee</th>
           <th>Sled cost</th>
           <th>Assy + ship</th>
-          <th>Factor</th>
           <th>Sale price</th>
+          <th>Factor</th>
           <th>Total cost</th>
         </tr>
       </thead>
@@ -121,7 +121,7 @@
     <div class="pricing-footer">
       <button class="apply-btn" onclick="applyPricing()">Apply</button>
       <input type="password" id="save-password" placeholder="Password">
-      <input type="text" id="save-message" placeholder="Note e.g. Ted's proposal">
+      <input type="text" id="save-message" placeholder="Note e.g. new costs">
       <button class="save-btn" id="save-btn" onclick="savePricing()">Save to GitHub</button>
       <span class="status-msg" id="status-msg"></span>
     </div>
@@ -314,8 +314,8 @@ function buildPricingTable() {
       <td><input type="number" id="pt-body-${i}" value="${c.body}" min="0" step="25" oninput="recalcRow(${i})"></td>
       <td><input type="number" id="pt-sled-${i}" value="${c.sledCost}" min="0" step="5" oninput="recalcRow(${i})"></td>
       <td><input type="number" id="pt-assy-${i}" value="${c.assyShip}" min="0" step="5" oninput="recalcRow(${i})"></td>
-      <td><input type="number" id="pt-factor-${i}" value="${c.factor}" min="1" max="5" step="0.05" oninput="recalcRow(${i})"></td>
-      <td class="computed" id="pt-price-${i}">$${price.toLocaleString()}</td>
+      <td><input type="number" id="pt-price-${i}" value="${price}" min="0" step="50" oninput="recalcRow(${i})"></td>
+      <td class="computed" id="pt-factor-${i}">${c.factor}×</td>
       <td class="computed" id="pt-cost-${i}">$${totalCost.toLocaleString()}</td>
     `;
     tbody.appendChild(tr);
@@ -326,9 +326,10 @@ function recalcRow(i) {
   const body = parseFloat(document.getElementById('pt-body-' + i).value) || 0;
   const sled = parseFloat(document.getElementById('pt-sled-' + i).value) || 0;
   const assy = parseFloat(document.getElementById('pt-assy-' + i).value) || 0;
-  const factor = parseFloat(document.getElementById('pt-factor-' + i).value) || 1;
+  const price = parseFloat(document.getElementById('pt-price-' + i).value) || 0;
   const total = body + sled + assy;
-  document.getElementById('pt-price-' + i).textContent = '$' + round50(total * factor).toLocaleString();
+  const factor = total > 0 ? (price / total).toFixed(2) : '—';
+  document.getElementById('pt-factor-' + i).textContent = factor + '×';
   document.getElementById('pt-cost-' + i).textContent = '$' + total.toLocaleString();
 }
 
@@ -337,12 +338,16 @@ function applyPricing() {
     const body = parseFloat(document.getElementById('pt-body-' + i).value) || c.body;
     const sledCost = parseFloat(document.getElementById('pt-sled-' + i).value) || c.sledCost;
     const assyShip = parseFloat(document.getElementById('pt-assy-' + i).value) || c.assyShip;
-    const factor = parseFloat(document.getElementById('pt-factor-' + i).value) || c.factor;
-    const price = round50((body + sledCost + assyShip) * factor);
+    const price = parseFloat(document.getElementById('pt-price-' + i).value) || c.price;
+    const total = body + sledCost + assyShip;
+    const factor = total > 0 ? Math.round((price / total) * 100) / 100 : c.factor;
     return { ...c, body, sledCost, assyShip, factor, price };
   });
   buildButtons();
   update();
+  // close panel
+  document.getElementById('pricing-panel').classList.remove('open');
+  document.getElementById('pricing-toggle').classList.remove('open');
 }
 
 function togglePricing() {
