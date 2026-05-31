@@ -1,0 +1,60 @@
+{
+  "clocks": [
+    {
+      "name": "3-ft no river",
+      "short": "3ft\nno river",
+      "body": 325,
+      "sledCost": 85,
+      "assyShip": 140,
+      "factor": 2.3,
+      "price": 1250
+    },
+    {
+      "name": "3-ft surface",
+      "short": "3ft\nsurface",
+      "body": 350,
+      "sledCost": 85,
+      "assyShip": 140,
+      "factor": 2.7,
+      "price": 1550
+    },
+    {
+      "name": "3-ft through",
+      "short": "3ft\nthrough",
+      "body": 500,
+      "sledCost": 85,
+      "assyShip": 140,
+      "factor": 3,
+      "price": 2200
+    },
+    {
+      "name": "5-ft no river",
+      "short": "5ft\nno river",
+      "body": 480,
+      "sledCost": 85,
+      "assyShip": 140,
+      "factor": 2.3,
+      "price": 1600
+    },
+    {
+      "name": "5-ft surface",
+      "short": "5ft\nsurface",
+      "body": 575,
+      "sledCost": 85,
+      "assyShip": 140,
+      "factor": 2.7,
+      "price": 2150
+    },
+    {
+      "name": "5-ft through",
+      "short": "5ft\nthrough",
+      "body": 775,
+      "sledCost": 85,
+      "assyShip": 140,
+      "factor": 3,
+      "price": 3000
+    }
+  ],
+  "savedAt": "2026-05-31T16:22:32.040Z",
+  "message": "test"
+}
