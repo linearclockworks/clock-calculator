@@ -82,6 +82,25 @@
   .popup-close { position: absolute; top: 12px; right: 14px; font-size: 20px; cursor: pointer; color: #999; background: none; border: none; line-height: 1; font-family: inherit; }
   .popup-close:hover { color: #333; }
   .footer { text-align: center; font-size: 11px; color: #bbb; margin-top: 20px; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .card { border: none; box-shadow: none; max-width: 100%; }
+    .clock-btns, .sliders, .hint, .pricing-toggle, .pricing-panel, .chart, .footer { display: none !important; }
+    .print-section { display: block !important; }
+  }
+  .print-section { display: none; font-size: 12px; }
+  .print-section h2 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; color: #1a1a1a; }
+  .print-section h3 { font-size: 13px; font-weight: 600; margin: 12px 0 6px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+  .print-section p { margin-bottom: 6px; color: #444; line-height: 1.5; }
+  .print-section table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11px; }
+  .print-section th { text-align: right; padding: 5px 8px; background: #f4f4f2; border: 1px solid #ddd; font-weight: 600; }
+  .print-section th:first-child { text-align: left; }
+  .print-section td { text-align: right; padding: 5px 8px; border: 1px solid #ddd; }
+  .print-section td:first-child { text-align: left; font-weight: 500; }
+  .print-section .you { color: #185FA5; font-weight: 600; }
+  .print-section .ted { color: #0F6E56; font-weight: 600; }
+  .print-section .sig-block { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .print-section .sig-line { border-top: 1px solid #333; padding-top: 4px; color: #666; font-size: 11px; }
   @media (max-width: 600px) {
     .clock-btns { grid-template-columns: repeat(3, 1fr); }
     .sliders { grid-template-columns: 1fr; }
@@ -148,7 +167,7 @@
     </div>
   </div>
 
-  <div class="hint">Tap any bar to see the full breakdown.</div>
+  <div class="hint">Tap any bar to see the full breakdown. <button onclick="printAgreement()" style="margin-left:12px;padding:4px 12px;background:#185FA5;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;">Print Agreement</button></div>
 
   <div class="group">
     <div class="group-lbl you-lbl">Your profit</div>
@@ -503,6 +522,113 @@ async function restoreVersion() {
 
 loadPricing();
 loadHistory();
+</script>
+<div class="print-section" id="print-section"></div>
+
+<script>
+function printAgreement() {
+  const tedKeep1 = parseInt(document.getElementById('ted-keep1').value);
+  const tedKeep2 = parseInt(document.getElementById('ted-keep2').value);
+  const youKeep1 = 100 - tedKeep1;
+  const youKeep2 = 100 - tedKeep2;
+  const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+  // Build pricing table rows
+  let pricingRows = clocks.map(c => `
+    <tr>
+      <td>${c.name}</td>
+      <td>${fmt(c.price)}</td>
+      <td>${fmt(c.body)}</td>
+      <td>${fmt(c.sledCost)}</td>
+      <td>${fmt(c.assyShip)}</td>
+      <td>${c.factor}×</td>
+    </tr>`).join('');
+
+  // Build scenario rows for each clock
+  let scenarioRows = clocks.map(c => {
+    const allCosts = c.body + c.sledCost + c.assyShip;
+    const breakEven = c.body + c.assyShip;
+    const t1 = Math.round(c.price * tedKeep1 / 100);
+    const t2 = Math.round(c.price * tedKeep2 / 100);
+    const youCurr = c.price - allCosts;
+    const youFran1 = (c.price - t1) - c.sledCost;
+    const youFran2 = (c.price - t2) - c.sledCost;
+    return `
+    <tr>
+      <td>${c.name}</td>
+      <td>${fmt(c.price)}</td>
+      <td><span class="you">${fmt(youCurr)}</span></td>
+      <td><span class="ted">${fmt(c.body)}</span></td>
+      <td><span class="you">${fmt(youFran1)}</span></td>
+      <td><span class="ted">${fmt(t1)}</span> (${tedKeep1}%)</td>
+      <td><span class="you">${fmt(youFran2)}</span></td>
+      <td><span class="ted">${fmt(t2)}</span> (${tedKeep2}%)</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('print-section').innerHTML = `
+    <h2>Linear Clockworks — Franchising Agreement</h2>
+    <p><strong>Date:</strong> ${today}</p>
+    <p><strong>Between:</strong> Lindsay Morris (Linear Clockworks) and the Franchisee</p>
+
+    <h3>How It Works</h3>
+    <p>Linear Clockworks supplies the mechanism kit (sled + track) for each clock. The Franchisee builds the clock body, does final assembly, handles shipping, and optionally finds the customer. All sales go through the Linear Clockworks website at the prices listed below. Revenue is split as a percentage of the final sale price.</p>
+
+    <h3>Revenue Split</h3>
+    <p><strong>When the customer comes through the LCW website:</strong> Franchisee keeps ${tedKeep1}% of sale price. LCW keeps ${youKeep1}%.</p>
+    <p><strong>When the Franchisee finds the customer:</strong> Franchisee keeps ${tedKeep2}% of sale price. LCW keeps ${youKeep2}%.</p>
+    <p>The Franchisee's share covers their body materials, labor, assembly, and shipping. LCW's share covers the mechanism kit and brand/marketing costs.</p>
+
+    <h3>Pricing Table</h3>
+    <table>
+      <thead><tr>
+        <th>Clock</th><th>Sale Price</th><th>Body Fee</th><th>Sled Kit</th><th>Assy + Ship</th><th>Factor</th>
+      </tr></thead>
+      <tbody>${pricingRows}</tbody>
+    </table>
+
+    <h3>Profit Examples</h3>
+    <table>
+      <thead><tr>
+        <th>Clock</th>
+        <th>Sale price</th>
+        <th colspan="2">Current (LCW does all)</th>
+        <th colspan="2">Franchise — LCW customer</th>
+        <th colspan="2">Franchise — Your customer</th>
+      </tr>
+      <tr>
+        <th></th><th></th>
+        <th>LCW profit</th><th>Your gross</th>
+        <th>LCW profit</th><th>Your gross</th>
+        <th>LCW profit</th><th>Your gross</th>
+      </tr></thead>
+      <tbody>${scenarioRows}</tbody>
+    </table>
+
+    <h3>Ground Rules</h3>
+    <p>1. All clocks sell at the prices listed above. No discounting without LCW approval.</p>
+    <p>2. All sales go through the LCW website checkout. Franchisee referrals use a unique tracking code.</p>
+    <p>3. The mechanism kit (sled + track) is proprietary to LCW. It may not be copied or sourced elsewhere.</p>
+    <p>4. Unused mechanism kits must be returned to LCW if the franchising relationship ends.</p>
+    <p>5. Clock quality must meet LCW standards. LCW reserves the right to approve finished clocks before sale.</p>
+    <p>6. Revenue splits reset annually on January 1.</p>
+
+    <div class="sig-block">
+      <div>
+        <div class="sig-line">Lindsay Morris, Linear Clockworks</div>
+        <div class="sig-line" style="margin-top:32px;">Date</div>
+      </div>
+      <div>
+        <div class="sig-line">Franchisee</div>
+        <div class="sig-line" style="margin-top:32px;">Date</div>
+      </div>
+    </div>
+  `;
+
+  window.print();
+}
 </script>
 </body>
 </html>
