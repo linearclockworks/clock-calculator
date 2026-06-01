@@ -3,61 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linear Clockworks — Franchise Calculator</title>
+<title>Linear Clockworks — Franchise Profit Calculator</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f7; color: #1a1a1a; padding: 24px 16px; }
-  h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: #1a1a1a; }
   .subtitle { font-size: 13px; color: #888; margin-bottom: 24px; }
-  .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 20px; max-width: 900px; margin: 0 auto; }
-
-  /* Role selector */
-  .roles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-  .role-card { border: 1px solid #e8e8e8; border-radius: 8px; padding: 12px; }
-  .role-title { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-  .role-card select, .role-card input[type=number] { width: 100%; padding: 5px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: inherit; background: #fff; margin-top: 4px; }
-  .role-card label { font-size: 12px; color: #666; display: block; margin-top: 8px; }
-  .role-card .role-val { font-size: 18px; font-weight: 600; margin-top: 4px; }
-  .role-lcw { color: #185FA5; }
-  .role-maker { color: #0F6E56; }
-  .role-sales { color: #8B4513; }
-
-  /* Clock buttons */
+  .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 20px; max-width: 860px; margin: 0 auto; }
   .clock-btns { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 8px; }
   .clock-btn { padding: 7px 4px; border: 2px solid #e8e8e8; border-radius: 8px; background: #f4f4f2; color: #666; font-size: 11px; cursor: pointer; text-align: center; line-height: 1.3; font-family: inherit; }
   .clock-btn .btn-price { font-size: 12px; display: block; margin-top: 2px; }
   .clock-btn[data-active="true"] { background: #185FA5; color: #fff; border-color: #185FA5; font-weight: 700; }
   .clock-btn[data-active="true"] .btn-price { font-weight: 700; color: #fff; }
-  .clock-meta { font-size: 12px; color: #888; margin-bottom: 16px; }
-  .saved-at { font-size: 11px; color: #aaa; margin-bottom: 12px; }
-
-  /* Results */
-  .results { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-  .result-card { border-radius: 8px; padding: 14px; }
-  .result-card.lcw-card { background: #EBF4FF; }
-  .result-card.maker-card { background: #E8F5F0; }
-  .result-card.sales-card { background: #FDF3E8; }
-  .result-who { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .result-who.lcw { color: #185FA5; }
-  .result-who.maker { color: #0F6E56; }
-  .result-who.sales { color: #8B4513; }
-  .result-total { font-size: 26px; font-weight: 600; }
-  .result-total.lcw { color: #185FA5; }
-  .result-total.maker { color: #0F6E56; }
-  .result-total.sales { color: #8B4513; }
-  .result-pct { font-size: 12px; color: #888; margin-top: 2px; }
-  .result-breakdown { font-size: 11px; color: #888; margin-top: 6px; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 6px; line-height: 1.6; }
-
-  /* Bar */
-  .bar-section { margin-bottom: 20px; }
-  .bar-label { font-size: 11px; color: #888; margin-bottom: 6px; }
-  .bar-track { display: flex; height: 36px; border-radius: 6px; overflow: hidden; }
-  .bar-seg { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; transition: width 0.4s ease; overflow: hidden; white-space: nowrap; min-width: 2px; }
-  .bar-lcw { background: #378ADD; color: #E6F1FB; }
-  .bar-maker { background: #1D9E75; color: #E1F5EE; }
-  .bar-sales { background: #D4813A; color: #FDF3E8; }
-  .bar-sled { background: #a0c4e8; color: #185FA5; }
-
+  .clock-meta { font-size: 12px; color: #888; margin-bottom: 12px; }
+  .sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; margin-bottom: 24px; }
+  .sl { display: flex; flex-direction: column; gap: 4px; }
+  .sl label { font-size: 12px; color: #666; }
+  .sl input[type=range] { width: 100%; accent-color: #185FA5; }
+  .sl-val { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .group { margin-bottom: 20px; }
+  .group-lbl { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+  .you-lbl { color: #185FA5; }
+  .ted-lbl { color: #0F6E56; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { width: 210px; flex-shrink: 0; }
+  .bar-label-main { font-size: 11px; color: #555; }
+  .bar-label-sub { font-size: 10px; color: #999; margin-top: 1px; }
+  .bar-track { flex: 1; background: #f0f0ee; border-radius: 3px; height: 28px; position: relative; overflow: hidden; cursor: pointer; transition: opacity 0.15s; }
+  .bar-track:hover { opacity: 0.85; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 12px; font-weight: 500; transition: width 0.4s ease; white-space: nowrap; overflow: hidden; min-width: 2px; pointer-events: none; }
+  .bar-you { background: #378ADD; color: #E6F1FB; }
+  .bar-ted { background: #1D9E75; color: #E1F5EE; }
+  .marker { position: absolute; top: 0; height: 100%; width: 2px; background: rgba(255,255,255,0.8); pointer-events: none; transition: left 0.4s ease; }
+  .divider { border: none; border-top: 1px solid #ebebeb; margin: 0 0 20px; }
+  .legend { display: flex; gap: 16px; margin-bottom: 14px; font-size: 11px; color: #888; align-items: center; }
+  .legend-line { width: 16px; height: 2px; background: rgba(150,150,150,0.6); display: inline-block; vertical-align: middle; margin-right: 4px; }
+  .hint { font-size: 11px; color: #aaa; margin-bottom: 16px; }
   /* Pricing panel */
   .pricing-toggle { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px; cursor: pointer; font-size: 12px; color: #185FA5; font-weight: 500; user-select: none; background: none; border: none; font-family: inherit; padding: 0; }
   .pricing-toggle .arrow { display: inline-block; transition: transform 0.2s; font-size: 10px; }
@@ -82,41 +63,56 @@
   .status-msg { font-size: 11px; color: #888; }
   .status-msg.ok { color: #0F6E56; }
   .status-msg.err { color: #c0392b; }
-
-  /* Print */
-  .hint { font-size: 11px; color: #aaa; margin-bottom: 16px; }
+  .saved-at { font-size: 11px; color: #aaa; margin-bottom: 12px; }
+  /* Popup */
+  .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); z-index: 100; align-items: center; justify-content: center; }
+  .popup-overlay.open { display: flex; }
+  .popup { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 20px; min-width: 260px; max-width: 340px; width: 90%; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+  .popup-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .popup-sub { font-size: 11px; color: #888; margin-bottom: 14px; }
+  .popup-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #f0f0ee; }
+  .popup-row:last-child { border-bottom: none; }
+  .popup-row .lbl { color: #666; }
+  .popup-row .amt { font-weight: 500; color: #1a1a1a; }
+  .popup-row.total { margin-top: 4px; }
+  .popup-row.total .lbl { font-weight: 600; color: #1a1a1a; }
+  .popup-row.total .amt { font-size: 18px; font-weight: 600; }
+  .popup-row.total-you .amt { color: #185FA5; }
+  .popup-row.total-ted .amt { color: #0F6E56; }
+  .popup-close { position: absolute; top: 12px; right: 14px; font-size: 20px; cursor: pointer; color: #999; background: none; border: none; line-height: 1; font-family: inherit; }
+  .popup-close:hover { color: #333; }
+  .footer { text-align: center; font-size: 11px; color: #bbb; margin-top: 20px; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .card { border: none; box-shadow: none; max-width: 100%; }
+    .clock-btns, .sliders, .hint, .pricing-toggle, .pricing-panel, .chart, .footer { display: none !important; }
+    .print-section { display: block !important; }
+  }
   .print-section { display: none; font-size: 12px; }
-  .print-section h2 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; }
-  .print-section h3 { font-size: 13px; font-weight: 600; margin: 14px 0 6px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+  .print-section h2 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; color: #1a1a1a; }
+  .print-section h3 { font-size: 13px; font-weight: 600; margin: 12px 0 6px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 4px; }
   .print-section p { margin-bottom: 6px; color: #444; line-height: 1.5; }
   .print-section table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11px; }
   .print-section th { text-align: right; padding: 5px 8px; background: #f4f4f2; border: 1px solid #ddd; font-weight: 600; }
   .print-section th:first-child { text-align: left; }
   .print-section td { text-align: right; padding: 5px 8px; border: 1px solid #ddd; }
   .print-section td:first-child { text-align: left; font-weight: 500; }
-  .print-section .lcw-col { color: #185FA5; font-weight: 600; }
-  .print-section .maker-col { color: #0F6E56; font-weight: 600; }
-  .print-section .sales-col { color: #8B4513; font-weight: 600; }
+  .print-section .you { color: #185FA5; font-weight: 600; }
+  .print-section .ted { color: #0F6E56; font-weight: 600; }
   .print-section .sig-block { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-  .print-section .sig-line { border-top: 1px solid #333; padding-top: 4px; color: #666; font-size: 11px; margin-top: 32px; }
-  .footer { text-align: center; font-size: 11px; color: #bbb; margin-top: 20px; }
-
-  @media print {
-    body { background: #fff; padding: 0; }
-    .card { border: none; max-width: 100%; padding: 0; }
-    .clock-btns, .roles, .results, .bar-section, .hint, .pricing-toggle, .pricing-panel, .saved-at, .clock-meta, h1, .subtitle, .footer { display: none !important; }
-    .print-section { display: block !important; }
-  }
+  .print-section .sig-line { border-top: 1px solid #333; padding-top: 4px; color: #666; font-size: 11px; }
   @media (max-width: 600px) {
     .clock-btns { grid-template-columns: repeat(3, 1fr); }
-    .roles, .results { grid-template-columns: 1fr; }
+    .sliders { grid-template-columns: 1fr; }
+    .bar-label { width: 140px; }
   }
 </style>
 </head>
 <body>
+
 <div class="card">
   <h1>Linear Clockworks</h1>
-  <p class="subtitle">Franchise Calculator — select a clock, assign roles, tap Print Agreement</p>
+  <p class="subtitle">Franchise Profit Calculator — tap a clock, drag the sliders, tap a bar for details</p>
 
   <div class="clock-btns" id="clock-btns"></div>
   <div class="clock-meta" id="clock-meta"></div>
@@ -125,11 +121,20 @@
   <button class="pricing-toggle" id="pricing-toggle" onclick="togglePricing()">
     <span class="arrow">▶</span> Edit pricing table
   </button>
+
   <div class="pricing-panel" id="pricing-panel">
     <table>
-      <thead><tr>
-        <th>Clock</th><th>Body fee</th><th>Sled kit</th><th>Assy + ship</th><th>Sale price</th><th>Margin multiplier</th><th>Total cost</th>
-      </tr></thead>
+      <thead>
+        <tr>
+          <th>Clock</th>
+          <th>Body fee</th>
+          <th>Sled cost</th>
+          <th>Assy + ship</th>
+          <th>Sale price</th>
+          <th>Margin multiplier</th>
+          <th>Total cost</th>
+        </tr>
+      </thead>
       <tbody id="pricing-tbody"></tbody>
     </table>
     <div class="pricing-footer">
@@ -139,7 +144,7 @@
       <button class="save-btn" id="save-btn" onclick="savePricing()">Save to GitHub</button>
       <span class="status-msg" id="status-msg"></span>
     </div>
-    <div class="pricing-footer" style="border-top:1px solid #e8e8e8;background:#f5f5f3;">
+    <div class="pricing-footer" style="border-top:1px solid #e8e8e8; background:#f5f5f3;">
       <span style="font-size:12px;color:#888;">Restore from history:</span>
       <select id="history-select" style="font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:4px;font-family:inherit;flex:1;min-width:200px;">
         <option value="">— load history —</option>
@@ -149,80 +154,73 @@
     </div>
   </div>
 
-  <!-- Role assignment -->
-  <div class="roles">
-    <div class="role-card">
-      <div class="role-title">🔧 Clockmaker</div>
-      <label>Who makes the body?</label>
-      <select id="role-maker" onchange="update()">
-        <option value="ted">Ted</option>
-        <option value="bryan">Bryan</option>
-        <option value="other">Other</option>
-      </select>
-      <label>Body fee paid to them</label>
-      <div class="role-val maker" id="maker-fee">—</div>
-      <label>Also does assembly + shipping?</label>
-      <select id="maker-does-assy" onchange="update()">
-        <option value="yes">Yes</option>
-        <option value="no">No — LCW does it</option>
-      </select>
+  <div class="sliders">
+    <div class="sl">
+      <label>Ted's percentage — your website customer</label>
+      <input type="range" id="ted-keep1" min="0" max="95" step="1" value="38" oninput="update()">
+      <span class="sl-val" id="v-ted-keep1">38%</span>
     </div>
-    <div class="role-card">
-      <div class="role-title">🤝 Sales</div>
-      <label>Who found the customer?</label>
-      <select id="role-sales" onchange="update()">
-        <option value="lcw">LCW website</option>
-        <option value="maker">Same as clockmaker</option>
-        <option value="ted">Ted</option>
-        <option value="bryan">Bryan</option>
-        <option value="other">Other</option>
-      </select>
-      <label>Sales commission % of sale price</label>
-      <input type="number" id="sales-pct" value="20" min="0" max="40" step="1" oninput="update()">
-    </div>
-    <div class="role-card">
-      <div class="role-title" style="color:#185FA5;">📦 LCW</div>
-      <label>Supplies</label>
-      <div style="font-size:12px;color:#555;margin-top:4px;line-height:1.6;">Mechanism kit (sled + track)<br>Brand + marketing<br>Website + order processing</div>
-      <label>LCW net profit</label>
-      <div class="role-val role-lcw" id="lcw-profit">—</div>
+    <div class="sl">
+      <label>Ted's percentage — Ted finds customer</label>
+      <input type="range" id="ted-keep2" min="0" max="95" step="1" value="55" oninput="update()">
+      <span class="sl-val" id="v-ted-keep2">55%</span>
     </div>
   </div>
 
-  <!-- Results bar -->
-  <div class="bar-section">
-    <div class="bar-label">How the sale price is divided</div>
-    <div class="bar-track" id="bar-track"></div>
-  </div>
+  <div class="hint">Tap any bar to see the full breakdown. <button onclick="printAgreement()" style="margin-left:12px;padding:4px 12px;background:#185FA5;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;">Print Agreement</button></div>
 
-  <!-- Result cards -->
-  <div class="results">
-    <div class="result-card lcw-card">
-      <div class="result-who lcw">LCW</div>
-      <div class="result-total lcw" id="res-lcw-total">—</div>
-      <div class="result-pct" id="res-lcw-pct"></div>
-      <div class="result-breakdown" id="res-lcw-breakdown"></div>
+  <div class="group">
+    <div class="group-lbl you-lbl">Your profit</div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Current — direct sale</div><div class="bar-label-sub">You do everything</div></div>
+      <div class="bar-track" onclick="showPopup('a-you')"><div class="bar-fill bar-you" id="bar-a-you"></div></div>
     </div>
-    <div class="result-card maker-card">
-      <div class="result-who maker" id="res-maker-who">Clockmaker</div>
-      <div class="result-total maker" id="res-maker-total">—</div>
-      <div class="result-pct" id="res-maker-pct"></div>
-      <div class="result-breakdown" id="res-maker-breakdown"></div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Franchise — your customer</div><div class="bar-label-sub">Ted does assembly + shipping</div></div>
+      <div class="bar-track" onclick="showPopup('b-you')"><div class="bar-fill bar-you" id="bar-b-you"></div></div>
     </div>
-    <div class="result-card sales-card">
-      <div class="result-who sales" id="res-sales-who">Sales</div>
-      <div class="result-total sales" id="res-sales-total">—</div>
-      <div class="result-pct" id="res-sales-pct"></div>
-      <div class="result-breakdown" id="res-sales-breakdown"></div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Franchise — Ted's customer</div><div class="bar-label-sub">Ted finds customer, assembly + shipping</div></div>
+      <div class="bar-track" onclick="showPopup('c-you')"><div class="bar-fill bar-you" id="bar-c-you"></div></div>
     </div>
   </div>
 
-  <div class="hint">Adjust roles and commissions above to model any scenario. <button onclick="printAgreement()" style="margin-left:12px;padding:4px 12px;background:#185FA5;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;">Print Agreement</button></div>
+  <div class="divider"></div>
+
+  <div class="group">
+    <div class="group-lbl ted-lbl">Ted's gross</div>
+    <div class="legend"><span class="legend-line"></span> white line = Ted's break-even</div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Current</div><div class="bar-label-sub">Body fee only</div></div>
+      <div class="bar-track" onclick="showPopup('a-ted')"><div class="bar-fill bar-ted" id="bar-a-ted"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Franchise — your customer</div><div class="bar-label-sub">Ted does assembly + shipping</div></div>
+      <div class="bar-track" onclick="showPopup('b-ted')">
+        <div class="bar-fill bar-ted" id="bar-b-ted"></div>
+        <div class="marker" id="marker-b"></div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Franchise — Ted's customer</div><div class="bar-label-sub">Ted finds customer, assembly + shipping</div></div>
+      <div class="bar-track" onclick="showPopup('c-ted')">
+        <div class="bar-fill bar-ted" id="bar-c-ted"></div>
+        <div class="marker" id="marker-c"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="footer">Linear Clockworks · <a href="https://github.com/linearclockworks/clock-calculator/commits/main/pricing.json" target="_blank" style="color:#bbb">View pricing history</a></div>
+<div class="footer">Linear Clockworks · <a href="https://github.com/linearclockworks/clock-calculator/commits/main" target="_blank" style="color:#bbb">View history on GitHub</a></div>
 
-<div class="print-section" id="print-section"></div>
+<div class="popup-overlay" id="overlay" onclick="closePopup(event)">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup(null)">×</button>
+    <div class="popup-title" id="popup-title"></div>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div id="popup-rows"></div>
+  </div>
+</div>
 
 <script>
 function round50(n) { return Math.round(n / 50) * 50; }
@@ -240,6 +238,7 @@ let clocks = DEFAULTS.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.
 let currentSha = null;
 let activeIdx = 0;
 
+// Load from GitHub on startup
 async function loadPricing() {
   try {
     const r = await fetch('/api/pricing');
@@ -249,42 +248,31 @@ async function loadPricing() {
       currentSha = data.sha;
       if (data.savedAt) {
         const d = new Date(data.savedAt);
+        const who = data.message || '';
         document.getElementById('saved-at').textContent =
           'Last saved: ' + d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) +
           ' ' + d.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) +
-          (data.message ? ' — ' + data.message : '');
+          (who ? ' — ' + who : '');
       }
     }
-  } catch(e) {}
+  } catch(e) {
+    console.log('Could not load pricing, using defaults');
+  }
   buildButtons();
   update();
 }
 
-async function loadHistory() {
-  try {
-    const r = await fetch('/api/history');
-    const data = await r.json();
-    const sel = document.getElementById('history-select');
-    if (data.history) {
-      data.history.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.sha;
-        const d = new Date(c.date);
-        opt.textContent = d.toLocaleDateString('en-US', {month:'short',day:'numeric'}) + ' ' +
-          d.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) + ' — ' + c.message;
-        sel.appendChild(opt);
-      });
-    }
-  } catch(e) {}
-}
-
 async function savePricing() {
-  applyPricing();
+  applyPricing(); // always apply table edits before saving
   const password = document.getElementById('save-password').value;
   const message = document.getElementById('save-message').value || 'Updated pricing';
   const btn = document.getElementById('save-btn');
   const status = document.getElementById('status-msg');
-  btn.disabled = true; status.className = 'status-msg'; status.textContent = 'Saving…';
+
+  btn.disabled = true;
+  status.className = 'status-msg';
+  status.textContent = 'Saving…';
+
   try {
     const r = await fetch('/api/pricing', {
       method: 'POST',
@@ -294,36 +282,25 @@ async function savePricing() {
     const data = await r.json();
     if (r.ok) {
       currentSha = data.sha;
-      status.className = 'status-msg ok'; status.textContent = '✓ Saved';
+      status.className = 'status-msg ok';
+      status.textContent = '✓ Saved';
       const now = new Date();
-      document.getElementById('saved-at').textContent = 'Last saved: ' +
-        now.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) + ' ' +
-        now.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) + ' — ' + message;
+      document.getElementById('saved-at').textContent =
+        'Last saved: ' + now.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) +
+        ' ' + now.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) +
+        ' — ' + message;
     } else {
-      status.className = 'status-msg err'; status.textContent = '✗ ' + (data.error || 'Error');
+      status.className = 'status-msg err';
+      status.textContent = '✗ ' + (data.error || 'Error');
     }
-  } catch(e) { status.className = 'status-msg err'; status.textContent = '✗ Network error'; }
+  } catch(e) {
+    status.className = 'status-msg err';
+    status.textContent = '✗ Network error';
+  }
   btn.disabled = false;
 }
 
-async function restoreVersion() {
-  const sha = document.getElementById('history-select').value;
-  const msg = document.getElementById('restore-msg');
-  if (!sha) { msg.textContent = 'Pick a version first'; msg.className = 'status-msg err'; return; }
-  msg.className = 'status-msg'; msg.textContent = 'Loading…';
-  try {
-    const r = await fetch('/api/restore?sha=' + sha);
-    const data = await r.json();
-    if (data.clocks) {
-      clocks = data.clocks.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.assyShip) * c.factor) }));
-      buildButtons();
-      buildPricingTable();
-      update();
-      msg.className = 'status-msg ok'; msg.textContent = '✓ Restored — hit Save to keep';
-    }
-  } catch(e) { msg.className = 'status-msg err'; msg.textContent = '✗ Error'; }
-}
-
+// Build clock buttons
 const btnsEl = document.getElementById('clock-btns');
 function buildButtons() {
   btnsEl.innerHTML = '';
@@ -341,11 +318,13 @@ function buildButtons() {
   });
 }
 
+// Pricing table
 function buildPricingTable() {
   const tbody = document.getElementById('pricing-tbody');
   tbody.innerHTML = '';
   clocks.forEach((c, i) => {
-    const total = c.body + c.sledCost + c.assyShip;
+    const totalCost = c.body + c.sledCost + c.assyShip;
+    const price = round50(totalCost * c.factor);
     const tr = document.createElement('tr');
     tr.id = 'pt-row-' + i;
     if (i === activeIdx) tr.classList.add('active-row');
@@ -354,35 +333,38 @@ function buildPricingTable() {
       <td><input type="number" id="pt-body-${i}" value="${c.body}" min="0" step="25" oninput="recalcRow(${i})"></td>
       <td><input type="number" id="pt-sled-${i}" value="${c.sledCost}" min="0" step="5" oninput="recalcRow(${i})"></td>
       <td><input type="number" id="pt-assy-${i}" value="${c.assyShip}" min="0" step="5" oninput="recalcRow(${i})"></td>
-      <td><input type="number" id="pt-price-${i}" value="${c.price}" min="0" step="50" oninput="recalcRow(${i})"></td>
+      <td><input type="number" id="pt-price-${i}" value="${price}" min="0" step="50" oninput="recalcRow(${i})"></td>
       <td class="computed" id="pt-factor-${i}">${c.factor}×</td>
-      <td class="computed" id="pt-cost-${i}">$${total.toLocaleString()}</td>`;
+      <td class="computed" id="pt-cost-${i}">$${totalCost.toLocaleString()}</td>
+    `;
     tbody.appendChild(tr);
   });
 }
 
 function recalcRow(i) {
-  const body = parseFloat(document.getElementById('pt-body-'+i).value)||0;
-  const sled = parseFloat(document.getElementById('pt-sled-'+i).value)||0;
-  const assy = parseFloat(document.getElementById('pt-assy-'+i).value)||0;
-  const price = parseFloat(document.getElementById('pt-price-'+i).value)||0;
+  const body = parseFloat(document.getElementById('pt-body-' + i).value) || 0;
+  const sled = parseFloat(document.getElementById('pt-sled-' + i).value) || 0;
+  const assy = parseFloat(document.getElementById('pt-assy-' + i).value) || 0;
+  const price = parseFloat(document.getElementById('pt-price-' + i).value) || 0;
   const total = body + sled + assy;
-  document.getElementById('pt-factor-'+i).textContent = total > 0 ? (price/total).toFixed(2)+'×' : '—';
-  document.getElementById('pt-cost-'+i).textContent = '$'+total.toLocaleString();
+  const factor = total > 0 ? (price / total).toFixed(2) : '—';
+  document.getElementById('pt-factor-' + i).textContent = factor + '×';
+  document.getElementById('pt-cost-' + i).textContent = '$' + total.toLocaleString();
 }
 
 function applyPricing() {
   clocks = clocks.map((c, i) => {
-    const body = parseFloat(document.getElementById('pt-body-'+i).value)||c.body;
-    const sledCost = parseFloat(document.getElementById('pt-sled-'+i).value)||c.sledCost;
-    const assyShip = parseFloat(document.getElementById('pt-assy-'+i).value)||c.assyShip;
-    const price = parseFloat(document.getElementById('pt-price-'+i).value)||c.price;
+    const body = parseFloat(document.getElementById('pt-body-' + i).value) || c.body;
+    const sledCost = parseFloat(document.getElementById('pt-sled-' + i).value) || c.sledCost;
+    const assyShip = parseFloat(document.getElementById('pt-assy-' + i).value) || c.assyShip;
+    const price = parseFloat(document.getElementById('pt-price-' + i).value) || c.price;
     const total = body + sledCost + assyShip;
-    const factor = total > 0 ? Math.round((price/total)*100)/100 : c.factor;
+    const factor = total > 0 ? Math.round((price / total) * 100) / 100 : c.factor;
     return { ...c, body, sledCost, assyShip, factor, price };
   });
   buildButtons();
   update();
+  // close panel
   document.getElementById('pricing-panel').classList.remove('open');
   document.getElementById('pricing-toggle').classList.remove('open');
 }
@@ -396,148 +378,229 @@ function togglePricing() {
 }
 
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
-function pct(n, total) { return Math.round(n/total*100) + '%'; }
-
-function setBarSeg(id, w, color, label) {
+function setBar(id, val, max) {
   const el = document.getElementById(id);
-  if (el) { el.style.width = w + '%'; el.textContent = w > 10 ? label : ''; }
+  const pct = Math.max(1, Math.round(Math.max(0, val) / max * 100));
+  el.style.width = pct + '%';
+  el.textContent = pct > 12 ? fmt(val) : '';
+}
+function setMarker(id, val, max) {
+  document.getElementById(id).style.left = Math.round(val / max * 100) + '%';
+}
+
+let popupData = {};
+function buildRows(rows) {
+  return rows.map(r => {
+    const cls = r.total ? (r.you ? 'popup-row total total-you' : 'popup-row total total-ted') : 'popup-row';
+    return `<div class="${cls}"><span class="lbl">${r.lbl}</span><span class="amt">${r.amt}</span></div>`;
+  }).join('');
+}
+function showPopup(key) {
+  const d = popupData[key]; if (!d) return;
+  document.getElementById('popup-title').textContent = d.title;
+  document.getElementById('popup-sub').textContent = d.sub;
+  document.getElementById('popup-rows').innerHTML = buildRows(d.rows);
+  document.getElementById('overlay').classList.add('open');
+}
+function closePopup(e) {
+  if (e && e.target !== document.getElementById('overlay')) return;
+  document.getElementById('overlay').classList.remove('open');
 }
 
 function update() {
   const c = clocks[activeIdx];
-  const salesPct = parseInt(document.getElementById('sales-pct').value) / 100;
-  const makerDoesAssy = document.getElementById('maker-does-assy').value === 'yes';
-  const roleSales = document.getElementById('role-sales').value;
-  const roleMaker = document.getElementById('role-maker').value;
+  const tedKeep1 = parseInt(document.getElementById('ted-keep1').value) / 100;
+  const tedKeep2 = parseInt(document.getElementById('ted-keep2').value) / 100;
+  document.getElementById('v-ted-keep1').textContent = Math.round(tedKeep1*100) + '%';
+  document.getElementById('v-ted-keep2').textContent = Math.round(tedKeep2*100) + '%';
+  document.getElementById('clock-meta').textContent = 'Price ' + fmt(c.price) + '  ·  Body fee ' + fmt(c.body) + '  ·  Factor ' + c.factor + '×';
 
-  document.getElementById('clock-meta').textContent =
-    'Price ' + fmt(c.price) + '  ·  Body fee ' + fmt(c.body) + '  ·  Margin multiplier ' + c.factor + '×';
-  document.getElementById('maker-fee').textContent = fmt(c.body);
+  const max = c.price;
+  const allCosts = c.body + c.sledCost + c.assyShip;
+  const breakEven = c.body + c.assyShip;
+  const t1 = Math.round(c.price * tedKeep1);
+  const t2 = Math.round(c.price * tedKeep2);
+  const youCurr = c.price - allCosts;
+  const youFran1 = (c.price - t1) - c.sledCost;
+  const youFran2 = (c.price - t2) - c.sledCost;
 
-  // Determine if sales and maker are same person
-  const salesIsMaker = roleSales === 'maker' || roleSales === roleMaker;
-  const salesIsLCW = roleSales === 'lcw';
-
-  // Calculate payments
-  const salesCommission = salesIsLCW ? 0 : Math.round(c.price * salesPct);
-  const makerBodyFee = c.body;
-  const assyFee = makerDoesAssy ? c.assyShip : 0;
-  const makerTotal = makerBodyFee + assyFee + (salesIsMaker && !salesIsLCW ? salesCommission : 0);
-  const separateSalesTotal = (!salesIsMaker && !salesIsLCW) ? salesCommission : 0;
-  const lcwTotal = c.price - makerTotal - separateSalesTotal;
-  const lcwNet = lcwTotal - c.sledCost - (!makerDoesAssy ? 0 : 0);
-
-  // Name labels
-  const makerName = roleMaker === 'ted' ? 'Ted' : roleMaker === 'bryan' ? 'Bryan' : 'Clockmaker';
-  const salesName = salesIsLCW ? 'LCW' : roleSales === 'maker' ? makerName :
-    roleSales === 'ted' ? 'Ted' : roleSales === 'bryan' ? 'Bryan' : 'Sales';
-
-  // Update result cards
-  document.getElementById('res-lcw-total').textContent = fmt(lcwTotal);
-  document.getElementById('res-lcw-pct').textContent = pct(lcwTotal, c.price) + ' of sale';
-  document.getElementById('res-lcw-breakdown').innerHTML =
-    'Mechanism kit: −' + fmt(c.sledCost) +
-    (!makerDoesAssy ? '<br>Assy + ship: −' + fmt(c.assyShip) : '') +
-    '<br><strong>Net profit: ' + fmt(lcwTotal - c.sledCost - (!makerDoesAssy ? c.assyShip : 0)) + '</strong>';
-
-  document.getElementById('res-maker-who').textContent = makerName;
-  document.getElementById('res-maker-total').textContent = fmt(makerTotal);
-  document.getElementById('res-maker-pct').textContent = pct(makerTotal, c.price) + ' of sale';
-  document.getElementById('res-maker-breakdown').innerHTML =
-    'Body fee: ' + fmt(makerBodyFee) +
-    (makerDoesAssy ? '<br>Assy + ship: ' + fmt(assyFee) : '') +
-    (salesIsMaker && !salesIsLCW ? '<br>Sales commission: ' + fmt(salesCommission) : '');
-
-  document.getElementById('res-sales-who').textContent = salesIsLCW ? 'No separate sales role' : salesName + ' (sales)';
-  document.getElementById('res-sales-total').textContent = salesIsLCW ? '—' : fmt(separateSalesTotal);
-  document.getElementById('res-sales-pct').textContent = salesIsLCW ? 'Customer from LCW website' :
-    salesIsMaker ? 'Included in ' + makerName + "'s total" : pct(separateSalesTotal, c.price) + ' of sale';
-  document.getElementById('res-sales-breakdown').innerHTML = salesIsLCW ? '' :
-    salesIsMaker ? makerName + ' gets sales commission<br>included above' :
-    Math.round(salesPct*100) + '% of ' + fmt(c.price) + ' sale price';
-
-  // Bar
-  const barTrack = document.getElementById('bar-track');
-  barTrack.innerHTML = '';
-  const segments = [
-    { val: lcwTotal, cls: 'bar-seg bar-lcw', label: 'LCW ' + fmt(lcwTotal) },
-    { val: makerTotal, cls: 'bar-seg bar-maker', label: makerName + ' ' + fmt(makerTotal) },
-  ];
-  if (!salesIsMaker && !salesIsLCW) {
-    segments.push({ val: separateSalesTotal, cls: 'bar-seg bar-sales', label: salesName + ' ' + fmt(separateSalesTotal) });
-  }
-  segments.forEach(s => {
-    const div = document.createElement('div');
-    div.className = s.cls;
-    div.style.width = Math.max(1, Math.round(s.val/c.price*100)) + '%';
-    div.style.transition = 'width 0.4s ease';
-    div.textContent = s.val/c.price > 0.1 ? s.label : '';
-    barTrack.appendChild(div);
-  });
+  setBar('bar-a-you', youCurr, max);
+  setBar('bar-b-you', youFran1, max);
+  setBar('bar-c-you', youFran2, max);
+  setBar('bar-a-ted', c.body, max);
+  setBar('bar-b-ted', t1, max);
+  setBar('bar-c-ted', t2, max);
+  setMarker('marker-b', breakEven, max);
+  setMarker('marker-c', breakEven, max);
 
   document.querySelectorAll('[id^="pt-row-"]').forEach((r, i) => {
     r.classList.toggle('active-row', i === activeIdx);
   });
+
+  popupData = {
+    'a-you': { title: 'Current — direct sale', sub: 'You do everything', rows: [
+      { lbl: 'Sale price', amt: fmt(c.price) },
+      { lbl: 'Body fee to Ted', amt: '−' + fmt(c.body) },
+      { lbl: 'Sled cost', amt: '−' + fmt(c.sledCost) },
+      { lbl: 'Assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Your net profit', amt: fmt(youCurr), total: true, you: true },
+    ]},
+    'b-you': { title: 'Franchise — your website customer', sub: 'Ted does assembly + shipping', rows: [
+      { lbl: 'Sale price', amt: fmt(c.price) },
+      { lbl: 'Ted keeps (' + Math.round(tedKeep1*100) + '%)', amt: '−' + fmt(t1) },
+      { lbl: 'Your gross share', amt: fmt(c.price - t1) },
+      { lbl: 'Sled cost', amt: '−' + fmt(c.sledCost) },
+      { lbl: 'Your net profit', amt: fmt(youFran1), total: true, you: true },
+    ]},
+    'c-you': { title: "Franchise — Ted's customer", sub: 'Ted finds customer, assembly + shipping', rows: [
+      { lbl: 'Sale price', amt: fmt(c.price) },
+      { lbl: 'Ted keeps (' + Math.round(tedKeep2*100) + '%)', amt: '−' + fmt(t2) },
+      { lbl: 'Your gross share', amt: fmt(c.price - t2) },
+      { lbl: 'Sled cost', amt: '−' + fmt(c.sledCost) },
+      { lbl: 'Your net profit', amt: fmt(youFran2), total: true, you: true },
+    ]},
+    'a-ted': { title: 'Ted — current', sub: 'Body fee only', rows: [
+      { lbl: 'Body fee (gross)', amt: fmt(c.body) },
+      { lbl: "Ted's gross", amt: fmt(c.body), total: true, you: false },
+    ]},
+    'b-ted': { title: 'Ted — franchise, your customer', sub: 'Ted does assembly + shipping', rows: [
+      { lbl: "Ted's gross (" + Math.round(tedKeep1*100) + '%)', amt: fmt(t1) },
+      { lbl: 'Body fee (materials + labor)', amt: '−' + fmt(c.body) },
+      { lbl: 'Assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Above break-even', amt: fmt(t1 - breakEven) },
+      { lbl: "Ted's gross", amt: fmt(t1), total: true, you: false },
+    ]},
+    'c-ted': { title: "Ted — franchise, Ted's customer", sub: 'Ted finds customer, assembly + shipping', rows: [
+      { lbl: "Ted's gross (" + Math.round(tedKeep2*100) + '%)', amt: fmt(t2) },
+      { lbl: 'Body fee (materials + labor)', amt: '−' + fmt(c.body) },
+      { lbl: 'Assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Above break-even', amt: fmt(t2 - breakEven) },
+      { lbl: "Ted's gross", amt: fmt(t2), total: true, you: false },
+    ]},
+  };
 }
 
+// Load history into dropdown
+async function loadHistory() {
+  try {
+    const r = await fetch('/api/history');
+    const data = await r.json();
+    const sel = document.getElementById('history-select');
+    if (data.history) {
+      data.history.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.sha;
+        const d = new Date(c.date);
+        const label = d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) +
+          ' ' + d.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) +
+          ' — ' + c.message;
+        opt.textContent = label;
+        sel.appendChild(opt);
+      });
+    }
+  } catch(e) { console.log('Could not load history'); }
+}
+
+async function restoreVersion() {
+  const sha = document.getElementById('history-select').value;
+  const msg = document.getElementById('restore-msg');
+  if (!sha) { msg.textContent = 'Pick a version first'; msg.className = 'status-msg err'; return; }
+  msg.className = 'status-msg'; msg.textContent = 'Loading…';
+  try {
+    const r = await fetch('/api/restore?sha=' + sha);
+    const data = await r.json();
+    console.log('restore data', JSON.stringify(data).slice(0,300));
+    if (data.clocks) {
+      clocks = data.clocks.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.assyShip) * c.factor) }));
+      buildButtons();
+      buildPricingTable();
+      update();
+      msg.className = 'status-msg ok'; msg.textContent = '✓ Restored — hit Save to keep';
+    }
+  } catch(e) { msg.className = 'status-msg err'; msg.textContent = '✗ Error'; }
+}
+
+loadPricing();
+loadHistory();
+</script>
+<div class="print-section" id="print-section"></div>
+
+<script>
 function printAgreement() {
-  const salesPct = parseInt(document.getElementById('sales-pct').value);
-  const makerDoesAssy = document.getElementById('maker-does-assy').value === 'yes';
-  const roleSales = document.getElementById('role-sales').value;
-  const roleMaker = document.getElementById('role-maker').value;
-  const makerName = roleMaker === 'ted' ? 'Ted' : roleMaker === 'bryan' ? 'Bryan' : 'Clockmaker';
-  const today = new Date().toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
-  const salesIsMaker = roleSales === 'maker' || roleSales === roleMaker;
-  const salesIsLCW = roleSales === 'lcw';
+  const tedKeep1 = parseInt(document.getElementById('ted-keep1').value);
+  const tedKeep2 = parseInt(document.getElementById('ted-keep2').value);
+  const youKeep1 = 100 - tedKeep1;
+  const youKeep2 = 100 - tedKeep2;
+  const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
 
-  let pricingRows = clocks.map(c => `<tr>
-    <td>${c.name}</td><td>${fmt(c.price)}</td><td>${fmt(c.body)}</td>
-    <td>${fmt(c.sledCost)}</td><td>${fmt(c.assyShip)}</td><td>${c.factor}×</td>
-  </tr>`).join('');
+  function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
 
-  let exampleRows = clocks.map(c => {
-    const salesCommission = salesIsLCW ? 0 : Math.round(c.price * salesPct / 100);
-    const assyFee = makerDoesAssy ? c.assyShip : 0;
-    const makerTotal = c.body + assyFee + (salesIsMaker && !salesIsLCW ? salesCommission : 0);
-    const separateSales = (!salesIsMaker && !salesIsLCW) ? salesCommission : 0;
-    const lcwTotal = c.price - makerTotal - separateSales;
-    const lcwNet = lcwTotal - c.sledCost - (!makerDoesAssy ? c.assyShip : 0);
+  let pricingRows = clocks.map(c => {
+    const multiplier = c.factor + '×';
     return `<tr>
-      <td>${c.name}</td><td>${fmt(c.price)}</td>
-      <td class="lcw-col">${fmt(lcwNet)}</td>
-      <td class="maker-col">${fmt(makerTotal)}</td>
-      ${!salesIsMaker && !salesIsLCW ? `<td class="sales-col">${fmt(separateSales)}</td>` : '<td>—</td>'}
+      <td>${c.name}</td>
+      <td>${fmt(c.price)}</td>
+      <td>${fmt(c.body)}</td>
+      <td>${fmt(c.sledCost)}</td>
+      <td>${fmt(c.assyShip)}</td>
+      <td>${multiplier}</td>
     </tr>`;
   }).join('');
 
-  const salesColHeader = (!salesIsMaker && !salesIsLCW) ? `<th>Sales (${salesPct}%)</th>` : '<th>Sales</th>';
+  let scenarioRows = clocks.map(c => {
+    const allCosts = c.body + c.sledCost + c.assyShip;
+    const t1 = Math.round(c.price * tedKeep1 / 100);
+    const t2 = Math.round(c.price * tedKeep2 / 100);
+    const youCurr = c.price - allCosts;
+    const youFran1 = (c.price - t1) - c.sledCost;
+    const youFran2 = (c.price - t2) - c.sledCost;
+    return `<tr>
+      <td>${c.name}</td>
+      <td>${fmt(c.price)}</td>
+      <td class="you">${fmt(youCurr)}</td><td class="ted">${fmt(c.body)}</td>
+      <td class="you">${fmt(youFran1)}</td><td class="ted">${fmt(t1)} (${tedKeep1}%)</td>
+      <td class="you">${fmt(youFran2)}</td><td class="ted">${fmt(t2)} (${tedKeep2}%)</td>
+    </tr>`;
+  }).join('');
 
   document.getElementById('print-section').innerHTML = `
     <h2>Linear Clockworks — Franchising Agreement</h2>
     <p><strong>Date:</strong> ${today}</p>
-    <p><strong>Between:</strong> Lindsay Morris / Linear Clockworks &nbsp;&nbsp; and &nbsp;&nbsp;
-    <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (Franchisee)</p>
+    <p><strong>Between:</strong> Lindsay Morris / Linear Clockworks &nbsp;&nbsp;&nbsp; and &nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (Franchisee)</p>
 
     <h3>How It Works</h3>
-    <p>Linear Clockworks (LCW) supplies the mechanism kit (sled + track) for each clock, preprogrammed with the clock name and serial number. The Franchisee builds the clock body${makerDoesAssy ? ', handles final assembly and shipping' : ''}. All sales go through the LCW website at the listed prices. Revenue is split as described below. Clockmaking quality standards, administrative policies, NDA, and non-compete terms are set out in the separate <em>LCW Franchisee Policies &amp; Procedures</em> document, which forms part of this agreement.</p>
+    <p>Linear Clockworks (LCW) supplies the mechanism kit (sled + track) for each clock, preprogrammed with the clock name and serial number. The Franchisee builds the clock body, does final assembly, handles shipping, and optionally finds the customer. All sales go through the LCW website at the listed prices. Revenue is split as a percentage of the final sale price. Detailed clockmaking, quality, and administrative policies are set out in the separate <em>LCW Franchisee Policies &amp; Procedures</em> document, which forms part of this agreement.</p>
 
     <h3>Revenue Split</h3>
-    <p><strong>Clockmaking fee:</strong> ${makerName} receives the body fee for each clock as listed in the pricing table below${makerDoesAssy ? ', plus the assembly and shipping fee' : ''}. These are fixed fees regardless of sale price.</p>
-    ${salesIsLCW ? `<p><strong>Customer acquisition:</strong> All customers come through the LCW website. No separate sales commission applies.</p>` :
-    salesIsMaker ? `<p><strong>Customer acquisition:</strong> When ${makerName} finds the customer, ${makerName} also receives a sales commission of <strong>${salesPct}%</strong> of the sale price, in addition to the clockmaking fee.</p>` :
-    `<p><strong>Customer acquisition:</strong> When a separate sales person finds the customer, they receive <strong>${salesPct}%</strong> of the sale price as a trailing commission on that customer's first sale. If the customer returns independently via the LCW website on a future purchase, no commission applies.</p>`}
-    <p><strong>LCW receives</strong> the remainder after all fees and commissions. LCW's share covers the mechanism kit, brand, marketing, and website costs.</p>
+    <p><strong>Customer comes through the LCW website:</strong> Franchisee keeps <strong>${tedKeep1}%</strong> of sale price. LCW keeps <strong>${youKeep1}%</strong>.</p>
+    <p><strong>Franchisee finds the customer:</strong> Franchisee keeps <strong>${tedKeep2}%</strong> of sale price. LCW keeps <strong>${youKeep2}%</strong>.</p>
+    <p>The Franchisee's share covers body materials, labor, assembly, and shipping. LCW's share covers the mechanism kit and brand/marketing costs. Splits reset annually on January 1.</p>
 
     <h3>Pricing Table</h3>
     <table>
-      <thead><tr><th>Clock</th><th>Sale Price</th><th>Body Fee</th><th>Sled Kit</th><th>Assy + Ship</th><th>Margin multiplier</th></tr></thead>
+      <thead><tr>
+        <th>Clock</th><th>Sale Price</th><th>Body Fee</th><th>Sled Kit</th><th>Assy + Ship</th><th>Margin multiplier</th>
+      </tr></thead>
       <tbody>${pricingRows}</tbody>
     </table>
 
-    <h3>Example Profit Split</h3>
+    <h3>Profit Examples</h3>
     <table>
-      <thead><tr><th>Clock</th><th>Sale price</th><th>LCW net profit</th><th>${makerName} gross</th>${salesColHeader}</tr></thead>
-      <tbody>${exampleRows}</tbody>
+      <thead>
+        <tr>
+          <th>Clock</th><th>Sale price</th>
+          <th colspan="2">Current (LCW does all)</th>
+          <th colspan="2">Franchise — LCW customer</th>
+          <th colspan="2">Franchise — Your customer</th>
+        </tr>
+        <tr>
+          <th></th><th></th>
+          <th>LCW profit</th><th>Your gross</th>
+          <th>LCW profit</th><th>Your gross</th>
+          <th>LCW profit</th><th>Your gross</th>
+        </tr>
+      </thead>
+      <tbody>${scenarioRows}</tbody>
     </table>
 
     <h3>Ground Rules</h3>
@@ -545,26 +608,654 @@ function printAgreement() {
     <p>2. All sales go through the LCW website. Franchisee referrals use a unique tracking code assigned by LCW.</p>
     <p>3. The mechanism (sled + track) is proprietary to LCW and may not be copied or sourced elsewhere.</p>
     <p>4. Unused mechanism kits must be returned to LCW if this agreement ends.</p>
-    <p>5. Quality standards, serial number procedures, branding, and NDA/non-compete terms are in the Policies &amp; Procedures document.</p>
-    <p>6. Discount code: <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> &nbsp;&nbsp; Commission rate: <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>%</p>
+    <p>5. Clock quality must meet LCW standards as described in the Policies &amp; Procedures document.</p>
+    <p>6. The Franchisee agrees to the NDA and non-compete terms set out in the Policies &amp; Procedures document.</p>
+    <p>7. Franchisee discount code: <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> &nbsp; Commission rate: <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>%</p>
 
     <div class="sig-block">
       <div>
         <div class="sig-line">Lindsay Morris, Linear Clockworks</div>
-        <div class="sig-line" style="margin-top:8px;font-size:10px;color:#aaa;border:none;padding:0;">Date: _______________</div>
+        <div class="sig-line" style="margin-top:32px;">Date</div>
       </div>
       <div>
         <div class="sig-line">Franchisee signature</div>
-        <div class="sig-line" style="margin-top:4px;font-size:10px;color:#555;border:none;padding:0;">Print name: _______________</div>
-        <div class="sig-line" style="margin-top:8px;font-size:10px;color:#aaa;border:none;padding:0;">Date: _______________</div>
+        <div class="sig-line" style="margin-top:8px;font-size:10px;color:#aaa;">Print name</div>
+        <div class="sig-line" style="margin-top:24px;">Date</div>
       </div>
     </div>
   `;
+
   window.print();
+}html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linear Clockworks — Franchise Profit Calculator</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f7; color: #1a1a1a; padding: 24px 16px; }
+  h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: #1a1a1a; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 24px; }
+  .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 20px; max-width: 860px; margin: 0 auto; }
+  .clock-btns { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 8px; }
+  .clock-btn { padding: 7px 4px; border: 2px solid #e8e8e8; border-radius: 8px; background: #f4f4f2; color: #666; font-size: 11px; cursor: pointer; text-align: center; line-height: 1.3; font-family: inherit; }
+  .clock-btn .btn-price { font-size: 12px; display: block; margin-top: 2px; }
+  .clock-btn[data-active="true"] { background: #185FA5; color: #fff; border-color: #185FA5; font-weight: 700; }
+  .clock-btn[data-active="true"] .btn-price { font-weight: 700; color: #fff; }
+  .clock-meta { font-size: 12px; color: #888; margin-bottom: 12px; }
+  .sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; margin-bottom: 24px; }
+  .sl { display: flex; flex-direction: column; gap: 4px; }
+  .sl label { font-size: 12px; color: #666; }
+  .sl input[type=range] { width: 100%; accent-color: #185FA5; }
+  .sl-val { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .group { margin-bottom: 20px; }
+  .group-lbl { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+  .you-lbl { color: #185FA5; }
+  .ted-lbl { color: #0F6E56; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { width: 210px; flex-shrink: 0; }
+  .bar-label-main { font-size: 11px; color: #555; }
+  .bar-label-sub { font-size: 10px; color: #999; margin-top: 1px; }
+  .bar-track { flex: 1; background: #f0f0ee; border-radius: 3px; height: 28px; position: relative; overflow: hidden; cursor: pointer; transition: opacity 0.15s; }
+  .bar-track:hover { opacity: 0.85; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 12px; font-weight: 500; transition: width 0.4s ease; white-space: nowrap; overflow: hidden; min-width: 2px; pointer-events: none; }
+  .bar-you { background: #378ADD; color: #E6F1FB; }
+  .bar-ted { background: #1D9E75; color: #E1F5EE; }
+  .marker { position: absolute; top: 0; height: 100%; width: 2px; background: rgba(255,255,255,0.8); pointer-events: none; transition: left 0.4s ease; }
+  .divider { border: none; border-top: 1px solid #ebebeb; margin: 0 0 20px; }
+  .legend { display: flex; gap: 16px; margin-bottom: 14px; font-size: 11px; color: #888; align-items: center; }
+  .legend-line { width: 16px; height: 2px; background: rgba(150,150,150,0.6); display: inline-block; vertical-align: middle; margin-right: 4px; }
+  .hint { font-size: 11px; color: #aaa; margin-bottom: 16px; }
+  /* Pricing panel */
+  .pricing-toggle { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px; cursor: pointer; font-size: 12px; color: #185FA5; font-weight: 500; user-select: none; background: none; border: none; font-family: inherit; padding: 0; }
+  .pricing-toggle .arrow { display: inline-block; transition: transform 0.2s; font-size: 10px; }
+  .pricing-toggle.open .arrow { transform: rotate(90deg); }
+  .pricing-panel { display: none; margin-bottom: 20px; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; }
+  .pricing-panel.open { display: block; }
+  .pricing-panel table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .pricing-panel th { text-align: right; padding: 7px 10px; color: #888; font-weight: 500; border-bottom: 1px solid #ebebeb; background: #fafaf8; white-space: nowrap; }
+  .pricing-panel th:first-child { text-align: left; }
+  .pricing-panel td { padding: 6px 10px; border-bottom: 1px solid #f5f5f3; text-align: right; }
+  .pricing-panel td:first-child { text-align: left; color: #555; }
+  .pricing-panel tr:last-child td { border-bottom: none; }
+  .pricing-panel tr.active-row td { background: #f0f6ff; }
+  .pricing-panel input[type=number] { width: 70px; padding: 3px 5px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; text-align: right; font-family: inherit; background: #fff; }
+  .pricing-panel input[type=number]:focus { outline: none; border-color: #185FA5; }
+  .computed { color: #185FA5; font-weight: 500; }
+  .pricing-footer { padding: 10px; background: #fafaf8; border-top: 1px solid #ebebeb; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .apply-btn { padding: 5px 14px; background: #185FA5; color: #fff; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; }
+  .save-btn { padding: 5px 14px; background: #0F6E56; color: #fff; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; }
+  .save-btn:disabled { background: #aaa; cursor: default; }
+  .pricing-footer input[type=text], .pricing-footer input[type=password] { padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; font-family: inherit; width: 140px; }
+  .status-msg { font-size: 11px; color: #888; }
+  .status-msg.ok { color: #0F6E56; }
+  .status-msg.err { color: #c0392b; }
+  .saved-at { font-size: 11px; color: #aaa; margin-bottom: 12px; }
+  /* Popup */
+  .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); z-index: 100; align-items: center; justify-content: center; }
+  .popup-overlay.open { display: flex; }
+  .popup { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 20px; min-width: 260px; max-width: 340px; width: 90%; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+  .popup-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .popup-sub { font-size: 11px; color: #888; margin-bottom: 14px; }
+  .popup-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #f0f0ee; }
+  .popup-row:last-child { border-bottom: none; }
+  .popup-row .lbl { color: #666; }
+  .popup-row .amt { font-weight: 500; color: #1a1a1a; }
+  .popup-row.total { margin-top: 4px; }
+  .popup-row.total .lbl { font-weight: 600; color: #1a1a1a; }
+  .popup-row.total .amt { font-size: 18px; font-weight: 600; }
+  .popup-row.total-you .amt { color: #185FA5; }
+  .popup-row.total-ted .amt { color: #0F6E56; }
+  .popup-close { position: absolute; top: 12px; right: 14px; font-size: 20px; cursor: pointer; color: #999; background: none; border: none; line-height: 1; font-family: inherit; }
+  .popup-close:hover { color: #333; }
+  .footer { text-align: center; font-size: 11px; color: #bbb; margin-top: 20px; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .card { border: none; box-shadow: none; max-width: 100%; }
+    .clock-btns, .sliders, .hint, .pricing-toggle, .pricing-panel, .chart, .footer { display: none !important; }
+    .print-section { display: block !important; }
+  }
+  .print-section { display: none; font-size: 12px; }
+  .print-section h2 { font-size: 16px; font-weight: 600; margin: 16px 0 8px; color: #1a1a1a; }
+  .print-section h3 { font-size: 13px; font-weight: 600; margin: 12px 0 6px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+  .print-section p { margin-bottom: 6px; color: #444; line-height: 1.5; }
+  .print-section table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11px; }
+  .print-section th { text-align: right; padding: 5px 8px; background: #f4f4f2; border: 1px solid #ddd; font-weight: 600; }
+  .print-section th:first-child { text-align: left; }
+  .print-section td { text-align: right; padding: 5px 8px; border: 1px solid #ddd; }
+  .print-section td:first-child { text-align: left; font-weight: 500; }
+  .print-section .you { color: #185FA5; font-weight: 600; }
+  .print-section .ted { color: #0F6E56; font-weight: 600; }
+  .print-section .sig-block { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .print-section .sig-line { border-top: 1px solid #333; padding-top: 4px; color: #666; font-size: 11px; }
+  @media (max-width: 600px) {
+    .clock-btns { grid-template-columns: repeat(3, 1fr); }
+    .sliders { grid-template-columns: 1fr; }
+    .bar-label { width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Linear Clockworks</h1>
+  <p class="subtitle">Franchise Profit Calculator — tap a clock, drag the sliders, tap a bar for details</p>
+
+  <div class="clock-btns" id="clock-btns"></div>
+  <div class="clock-meta" id="clock-meta"></div>
+  <div class="saved-at" id="saved-at"></div>
+
+  <button class="pricing-toggle" id="pricing-toggle" onclick="togglePricing()">
+    <span class="arrow">▶</span> Edit pricing table
+  </button>
+
+  <div class="pricing-panel" id="pricing-panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Clock</th>
+          <th>Body fee</th>
+          <th>Sled cost</th>
+          <th>Assy + ship</th>
+          <th>Sale price</th>
+          <th>Margin multiplier</th>
+          <th>Total cost</th>
+        </tr>
+      </thead>
+      <tbody id="pricing-tbody"></tbody>
+    </table>
+    <div class="pricing-footer">
+      <button class="apply-btn" onclick="applyPricing()">Apply</button>
+      <input type="password" id="save-password" placeholder="Password">
+      <input type="text" id="save-message" placeholder="Note e.g. new costs">
+      <button class="save-btn" id="save-btn" onclick="savePricing()">Save to GitHub</button>
+      <span class="status-msg" id="status-msg"></span>
+    </div>
+    <div class="pricing-footer" style="border-top:1px solid #e8e8e8; background:#f5f5f3;">
+      <span style="font-size:12px;color:#888;">Restore from history:</span>
+      <select id="history-select" style="font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:4px;font-family:inherit;flex:1;min-width:200px;">
+        <option value="">— load history —</option>
+      </select>
+      <button class="apply-btn" onclick="restoreVersion()" style="background:#888;">Restore</button>
+      <span class="status-msg" id="restore-msg"></span>
+    </div>
+  </div>
+
+  <div class="sliders">
+    <div class="sl">
+      <label>Ted's percentage — your website customer</label>
+      <input type="range" id="ted-keep1" min="0" max="95" step="1" value="38" oninput="update()">
+      <span class="sl-val" id="v-ted-keep1">38%</span>
+    </div>
+    <div class="sl">
+      <label>Ted's percentage — Ted finds customer</label>
+      <input type="range" id="ted-keep2" min="0" max="95" step="1" value="55" oninput="update()">
+      <span class="sl-val" id="v-ted-keep2">55%</span>
+    </div>
+  </div>
+
+  <div class="hint">Tap any bar to see the full breakdown. <button onclick="printAgreement()" style="margin-left:12px;padding:4px 12px;background:#185FA5;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;">Print Agreement</button></div>
+
+  <div class="group">
+    <div class="group-lbl you-lbl">Your profit</div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Current — direct sale</div><div class="bar-label-sub">You do everything</div></div>
+      <div class="bar-track" onclick="showPopup('a-you')"><div class="bar-fill bar-you" id="bar-a-you"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Franchise — your customer</div><div class="bar-label-sub">Ted does assembly + shipping</div></div>
+      <div class="bar-track" onclick="showPopup('b-you')"><div class="bar-fill bar-you" id="bar-b-you"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Franchise — Ted's customer</div><div class="bar-label-sub">Ted finds customer, assembly + shipping</div></div>
+      <div class="bar-track" onclick="showPopup('c-you')"><div class="bar-fill bar-you" id="bar-c-you"></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="group">
+    <div class="group-lbl ted-lbl">Ted's gross</div>
+    <div class="legend"><span class="legend-line"></span> white line = Ted's break-even</div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Current</div><div class="bar-label-sub">Body fee only</div></div>
+      <div class="bar-track" onclick="showPopup('a-ted')"><div class="bar-fill bar-ted" id="bar-a-ted"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Franchise — your customer</div><div class="bar-label-sub">Ted does assembly + shipping</div></div>
+      <div class="bar-track" onclick="showPopup('b-ted')">
+        <div class="bar-fill bar-ted" id="bar-b-ted"></div>
+        <div class="marker" id="marker-b"></div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><div class="bar-label-main">Franchise — Ted's customer</div><div class="bar-label-sub">Ted finds customer, assembly + shipping</div></div>
+      <div class="bar-track" onclick="showPopup('c-ted')">
+        <div class="bar-fill bar-ted" id="bar-c-ted"></div>
+        <div class="marker" id="marker-c"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Linear Clockworks · <a href="https://github.com/linearclockworks/clock-calculator/commits/main" target="_blank" style="color:#bbb">View history on GitHub</a></div>
+
+<div class="popup-overlay" id="overlay" onclick="closePopup(event)">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup(null)">×</button>
+    <div class="popup-title" id="popup-title"></div>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div id="popup-rows"></div>
+  </div>
+</div>
+
+<script>
+function round50(n) { return Math.round(n / 50) * 50; }
+
+const DEFAULTS = [
+  { name: '3-ft no river', short: '3ft\nno river', body: 325, sledCost: 85, assyShip: 140, factor: 2.3 },
+  { name: '3-ft surface',  short: '3ft\nsurface',  body: 350, sledCost: 85, assyShip: 140, factor: 2.7 },
+  { name: '3-ft through',  short: '3ft\nthrough',  body: 500, sledCost: 85, assyShip: 140, factor: 3.0 },
+  { name: '5-ft no river', short: '5ft\nno river', body: 480, sledCost: 85, assyShip: 140, factor: 2.3 },
+  { name: '5-ft surface',  short: '5ft\nsurface',  body: 575, sledCost: 85, assyShip: 140, factor: 2.7 },
+  { name: '5-ft through',  short: '5ft\nthrough',  body: 775, sledCost: 85, assyShip: 140, factor: 3.0 },
+];
+
+let clocks = DEFAULTS.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.assyShip) * c.factor) }));
+let currentSha = null;
+let activeIdx = 0;
+
+// Load from GitHub on startup
+async function loadPricing() {
+  try {
+    const r = await fetch('/api/pricing');
+    const data = await r.json();
+    if (data.exists && data.clocks) {
+      clocks = data.clocks.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.assyShip) * c.factor) }));
+      currentSha = data.sha;
+      if (data.savedAt) {
+        const d = new Date(data.savedAt);
+        const who = data.message || '';
+        document.getElementById('saved-at').textContent =
+          'Last saved: ' + d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) +
+          ' ' + d.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) +
+          (who ? ' — ' + who : '');
+      }
+    }
+  } catch(e) {
+    console.log('Could not load pricing, using defaults');
+  }
+  buildButtons();
+  update();
+}
+
+async function savePricing() {
+  applyPricing(); // always apply table edits before saving
+  const password = document.getElementById('save-password').value;
+  const message = document.getElementById('save-message').value || 'Updated pricing';
+  const btn = document.getElementById('save-btn');
+  const status = document.getElementById('status-msg');
+
+  btn.disabled = true;
+  status.className = 'status-msg';
+  status.textContent = 'Saving…';
+
+  try {
+    const r = await fetch('/api/pricing', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password, clocks, message, sha: currentSha })
+    });
+    const data = await r.json();
+    if (r.ok) {
+      currentSha = data.sha;
+      status.className = 'status-msg ok';
+      status.textContent = '✓ Saved';
+      const now = new Date();
+      document.getElementById('saved-at').textContent =
+        'Last saved: ' + now.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) +
+        ' ' + now.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) +
+        ' — ' + message;
+    } else {
+      status.className = 'status-msg err';
+      status.textContent = '✗ ' + (data.error || 'Error');
+    }
+  } catch(e) {
+    status.className = 'status-msg err';
+    status.textContent = '✗ Network error';
+  }
+  btn.disabled = false;
+}
+
+// Build clock buttons
+const btnsEl = document.getElementById('clock-btns');
+function buildButtons() {
+  btnsEl.innerHTML = '';
+  clocks.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.dataset.active = i === activeIdx ? 'true' : 'false';
+    btn.className = 'clock-btn';
+    btn.innerHTML = c.short.replace('\n', '<br>') + '<span class="btn-price">$' + c.price.toLocaleString() + '</span>';
+    btn.addEventListener('click', () => {
+      activeIdx = i;
+      document.querySelectorAll('.clock-btn').forEach((b, j) => { b.dataset.active = j === i ? 'true' : 'false'; });
+      update();
+    });
+    btnsEl.appendChild(btn);
+  });
+}
+
+// Pricing table
+function buildPricingTable() {
+  const tbody = document.getElementById('pricing-tbody');
+  tbody.innerHTML = '';
+  clocks.forEach((c, i) => {
+    const totalCost = c.body + c.sledCost + c.assyShip;
+    const price = round50(totalCost * c.factor);
+    const tr = document.createElement('tr');
+    tr.id = 'pt-row-' + i;
+    if (i === activeIdx) tr.classList.add('active-row');
+    tr.innerHTML = `
+      <td>${c.name}</td>
+      <td><input type="number" id="pt-body-${i}" value="${c.body}" min="0" step="25" oninput="recalcRow(${i})"></td>
+      <td><input type="number" id="pt-sled-${i}" value="${c.sledCost}" min="0" step="5" oninput="recalcRow(${i})"></td>
+      <td><input type="number" id="pt-assy-${i}" value="${c.assyShip}" min="0" step="5" oninput="recalcRow(${i})"></td>
+      <td><input type="number" id="pt-price-${i}" value="${price}" min="0" step="50" oninput="recalcRow(${i})"></td>
+      <td class="computed" id="pt-factor-${i}">${c.factor}×</td>
+      <td class="computed" id="pt-cost-${i}">$${totalCost.toLocaleString()}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function recalcRow(i) {
+  const body = parseFloat(document.getElementById('pt-body-' + i).value) || 0;
+  const sled = parseFloat(document.getElementById('pt-sled-' + i).value) || 0;
+  const assy = parseFloat(document.getElementById('pt-assy-' + i).value) || 0;
+  const price = parseFloat(document.getElementById('pt-price-' + i).value) || 0;
+  const total = body + sled + assy;
+  const factor = total > 0 ? (price / total).toFixed(2) : '—';
+  document.getElementById('pt-factor-' + i).textContent = factor + '×';
+  document.getElementById('pt-cost-' + i).textContent = '$' + total.toLocaleString();
+}
+
+function applyPricing() {
+  clocks = clocks.map((c, i) => {
+    const body = parseFloat(document.getElementById('pt-body-' + i).value) || c.body;
+    const sledCost = parseFloat(document.getElementById('pt-sled-' + i).value) || c.sledCost;
+    const assyShip = parseFloat(document.getElementById('pt-assy-' + i).value) || c.assyShip;
+    const price = parseFloat(document.getElementById('pt-price-' + i).value) || c.price;
+    const total = body + sledCost + assyShip;
+    const factor = total > 0 ? Math.round((price / total) * 100) / 100 : c.factor;
+    return { ...c, body, sledCost, assyShip, factor, price };
+  });
+  buildButtons();
+  update();
+  // close panel
+  document.getElementById('pricing-panel').classList.remove('open');
+  document.getElementById('pricing-toggle').classList.remove('open');
+}
+
+function togglePricing() {
+  const toggle = document.getElementById('pricing-toggle');
+  const panel = document.getElementById('pricing-panel');
+  const isOpen = panel.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+  if (isOpen) buildPricingTable();
+}
+
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+function setBar(id, val, max) {
+  const el = document.getElementById(id);
+  const pct = Math.max(1, Math.round(Math.max(0, val) / max * 100));
+  el.style.width = pct + '%';
+  el.textContent = pct > 12 ? fmt(val) : '';
+}
+function setMarker(id, val, max) {
+  document.getElementById(id).style.left = Math.round(val / max * 100) + '%';
+}
+
+let popupData = {};
+function buildRows(rows) {
+  return rows.map(r => {
+    const cls = r.total ? (r.you ? 'popup-row total total-you' : 'popup-row total total-ted') : 'popup-row';
+    return `<div class="${cls}"><span class="lbl">${r.lbl}</span><span class="amt">${r.amt}</span></div>`;
+  }).join('');
+}
+function showPopup(key) {
+  const d = popupData[key]; if (!d) return;
+  document.getElementById('popup-title').textContent = d.title;
+  document.getElementById('popup-sub').textContent = d.sub;
+  document.getElementById('popup-rows').innerHTML = buildRows(d.rows);
+  document.getElementById('overlay').classList.add('open');
+}
+function closePopup(e) {
+  if (e && e.target !== document.getElementById('overlay')) return;
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function update() {
+  const c = clocks[activeIdx];
+  const tedKeep1 = parseInt(document.getElementById('ted-keep1').value) / 100;
+  const tedKeep2 = parseInt(document.getElementById('ted-keep2').value) / 100;
+  document.getElementById('v-ted-keep1').textContent = Math.round(tedKeep1*100) + '%';
+  document.getElementById('v-ted-keep2').textContent = Math.round(tedKeep2*100) + '%';
+  document.getElementById('clock-meta').textContent = 'Price ' + fmt(c.price) + '  ·  Body fee ' + fmt(c.body) + '  ·  Factor ' + c.factor + '×';
+
+  const max = c.price;
+  const allCosts = c.body + c.sledCost + c.assyShip;
+  const breakEven = c.body + c.assyShip;
+  const t1 = Math.round(c.price * tedKeep1);
+  const t2 = Math.round(c.price * tedKeep2);
+  const youCurr = c.price - allCosts;
+  const youFran1 = (c.price - t1) - c.sledCost;
+  const youFran2 = (c.price - t2) - c.sledCost;
+
+  setBar('bar-a-you', youCurr, max);
+  setBar('bar-b-you', youFran1, max);
+  setBar('bar-c-you', youFran2, max);
+  setBar('bar-a-ted', c.body, max);
+  setBar('bar-b-ted', t1, max);
+  setBar('bar-c-ted', t2, max);
+  setMarker('marker-b', breakEven, max);
+  setMarker('marker-c', breakEven, max);
+
+  document.querySelectorAll('[id^="pt-row-"]').forEach((r, i) => {
+    r.classList.toggle('active-row', i === activeIdx);
+  });
+
+  popupData = {
+    'a-you': { title: 'Current — direct sale', sub: 'You do everything', rows: [
+      { lbl: 'Sale price', amt: fmt(c.price) },
+      { lbl: 'Body fee to Ted', amt: '−' + fmt(c.body) },
+      { lbl: 'Sled cost', amt: '−' + fmt(c.sledCost) },
+      { lbl: 'Assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Your net profit', amt: fmt(youCurr), total: true, you: true },
+    ]},
+    'b-you': { title: 'Franchise — your website customer', sub: 'Ted does assembly + shipping', rows: [
+      { lbl: 'Sale price', amt: fmt(c.price) },
+      { lbl: 'Ted keeps (' + Math.round(tedKeep1*100) + '%)', amt: '−' + fmt(t1) },
+      { lbl: 'Your gross share', amt: fmt(c.price - t1) },
+      { lbl: 'Sled cost', amt: '−' + fmt(c.sledCost) },
+      { lbl: 'Your net profit', amt: fmt(youFran1), total: true, you: true },
+    ]},
+    'c-you': { title: "Franchise — Ted's customer", sub: 'Ted finds customer, assembly + shipping', rows: [
+      { lbl: 'Sale price', amt: fmt(c.price) },
+      { lbl: 'Ted keeps (' + Math.round(tedKeep2*100) + '%)', amt: '−' + fmt(t2) },
+      { lbl: 'Your gross share', amt: fmt(c.price - t2) },
+      { lbl: 'Sled cost', amt: '−' + fmt(c.sledCost) },
+      { lbl: 'Your net profit', amt: fmt(youFran2), total: true, you: true },
+    ]},
+    'a-ted': { title: 'Ted — current', sub: 'Body fee only', rows: [
+      { lbl: 'Body fee (gross)', amt: fmt(c.body) },
+      { lbl: "Ted's gross", amt: fmt(c.body), total: true, you: false },
+    ]},
+    'b-ted': { title: 'Ted — franchise, your customer', sub: 'Ted does assembly + shipping', rows: [
+      { lbl: "Ted's gross (" + Math.round(tedKeep1*100) + '%)', amt: fmt(t1) },
+      { lbl: 'Body fee (materials + labor)', amt: '−' + fmt(c.body) },
+      { lbl: 'Assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Above break-even', amt: fmt(t1 - breakEven) },
+      { lbl: "Ted's gross", amt: fmt(t1), total: true, you: false },
+    ]},
+    'c-ted': { title: "Ted — franchise, Ted's customer", sub: 'Ted finds customer, assembly + shipping', rows: [
+      { lbl: "Ted's gross (" + Math.round(tedKeep2*100) + '%)', amt: fmt(t2) },
+      { lbl: 'Body fee (materials + labor)', amt: '−' + fmt(c.body) },
+      { lbl: 'Assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Above break-even', amt: fmt(t2 - breakEven) },
+      { lbl: "Ted's gross", amt: fmt(t2), total: true, you: false },
+    ]},
+  };
+}
+
+// Load history into dropdown
+async function loadHistory() {
+  try {
+    const r = await fetch('/api/history');
+    const data = await r.json();
+    const sel = document.getElementById('history-select');
+    if (data.history) {
+      data.history.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.sha;
+        const d = new Date(c.date);
+        const label = d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) +
+          ' ' + d.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) +
+          ' — ' + c.message;
+        opt.textContent = label;
+        sel.appendChild(opt);
+      });
+    }
+  } catch(e) { console.log('Could not load history'); }
+}
+
+async function restoreVersion() {
+  const sha = document.getElementById('history-select').value;
+  const msg = document.getElementById('restore-msg');
+  if (!sha) { msg.textContent = 'Pick a version first'; msg.className = 'status-msg err'; return; }
+  msg.className = 'status-msg'; msg.textContent = 'Loading…';
+  try {
+    const r = await fetch('/api/restore?sha=' + sha);
+    const data = await r.json();
+    console.log('restore data', JSON.stringify(data).slice(0,300));
+    if (data.clocks) {
+      clocks = data.clocks.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.assyShip) * c.factor) }));
+      buildButtons();
+      buildPricingTable();
+      update();
+      msg.className = 'status-msg ok'; msg.textContent = '✓ Restored — hit Save to keep';
+    }
+  } catch(e) { msg.className = 'status-msg err'; msg.textContent = '✗ Error'; }
 }
 
 loadPricing();
 loadHistory();
+</script>
+<div class="print-section" id="print-section"></div>
+
+<script>
+function printAgreement() {
+  const tedKeep1 = parseInt(document.getElementById('ted-keep1').value);
+  const tedKeep2 = parseInt(document.getElementById('ted-keep2').value);
+  const youKeep1 = 100 - tedKeep1;
+  const youKeep2 = 100 - tedKeep2;
+  const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+  // Build pricing table rows
+  let pricingRows = clocks.map(c => `
+    <tr>
+      <td>${c.name}</td>
+      <td>${fmt(c.price)}</td>
+      <td>${fmt(c.body)}</td>
+      <td>${fmt(c.sledCost)}</td>
+      <td>${fmt(c.assyShip)}</td>
+      <td>${c.factor}×</td>
+    </tr>`).join('');
+
+  // Build scenario rows for each clock
+  let scenarioRows = clocks.map(c => {
+    const allCosts = c.body + c.sledCost + c.assyShip;
+    const breakEven = c.body + c.assyShip;
+    const t1 = Math.round(c.price * tedKeep1 / 100);
+    const t2 = Math.round(c.price * tedKeep2 / 100);
+    const youCurr = c.price - allCosts;
+    const youFran1 = (c.price - t1) - c.sledCost;
+    const youFran2 = (c.price - t2) - c.sledCost;
+    return `
+    <tr>
+      <td>${c.name}</td>
+      <td>${fmt(c.price)}</td>
+      <td><span class="you">${fmt(youCurr)}</span></td>
+      <td><span class="ted">${fmt(c.body)}</span></td>
+      <td><span class="you">${fmt(youFran1)}</span></td>
+      <td><span class="ted">${fmt(t1)}</span> (${tedKeep1}%)</td>
+      <td><span class="you">${fmt(youFran2)}</span></td>
+      <td><span class="ted">${fmt(t2)}</span> (${tedKeep2}%)</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('print-section').innerHTML = `
+    <h2>Linear Clockworks — Franchising Agreement</h2>
+    <p><strong>Date:</strong> ${today}</p>
+    <p><strong>Between:</strong> Lindsay Morris (Linear Clockworks) and the Franchisee</p>
+
+    <h3>How It Works</h3>
+    <p>Linear Clockworks supplies the mechanism kit (sled + track) for each clock. The Franchisee builds the clock body, does final assembly, handles shipping, and optionally finds the customer. All sales go through the Linear Clockworks website at the prices listed below. Revenue is split as a percentage of the final sale price.</p>
+
+    <h3>Revenue Split</h3>
+    <p><strong>When the customer comes through the LCW website:</strong> Franchisee keeps ${tedKeep1}% of sale price. LCW keeps ${youKeep1}%.</p>
+    <p><strong>When the Franchisee finds the customer:</strong> Franchisee keeps ${tedKeep2}% of sale price. LCW keeps ${youKeep2}%.</p>
+    <p>The Franchisee's share covers their body materials, labor, assembly, and shipping. LCW's share covers the mechanism kit and brand/marketing costs.</p>
+
+    <h3>Pricing Table</h3>
+    <table>
+      <thead><tr>
+        <th>Clock</th><th>Sale Price</th><th>Body Fee</th><th>Sled Kit</th><th>Assy + Ship</th><th>Margin multiplier</th>
+      </tr></thead>
+      <tbody>${pricingRows}</tbody>
+    </table>
+
+    <h3>Profit Examples</h3>
+    <table>
+      <thead><tr>
+        <th>Clock</th>
+        <th>Sale price</th>
+        <th colspan="2">Current (LCW does all)</th>
+        <th colspan="2">Franchise — LCW customer</th>
+        <th colspan="2">Franchise — Your customer</th>
+      </tr>
+      <tr>
+        <th></th><th></th>
+        <th>LCW profit</th><th>Your gross</th>
+        <th>LCW profit</th><th>Your gross</th>
+        <th>LCW profit</th><th>Your gross</th>
+      </tr></thead>
+      <tbody>${scenarioRows}</tbody>
+    </table>
+
+    <h3>Ground Rules</h3>
+    <p>1. All clocks sell at the prices listed above. No discounting without LCW approval.</p>
+    <p>2. All sales go through the LCW website checkout. Franchisee referrals use a unique tracking code.</p>
+    <p>3. The mechanism kit (sled + track) is proprietary to LCW. It may not be copied or sourced elsewhere.</p>
+    <p>4. Unused mechanism kits must be returned to LCW if the franchising relationship ends.</p>
+    <p>5. Clock quality must meet LCW standards. LCW reserves the right to approve finished clocks before sale.</p>
+    <p>6. Revenue splits reset annually on January 1.</p>
+
+    <div class="sig-block">
+      <div>
+        <div class="sig-line">Lindsay Morris, Linear Clockworks</div>
+        <div class="sig-line" style="margin-top:32px;">Date</div>
+      </div>
+      <div>
+        <div class="sig-line">Franchisee</div>
+        <div class="sig-line" style="margin-top:32px;">Date</div>
+      </div>
+    </div>
+  `;
+
+  window.print();
+}
 </script>
 </body>
 </html>
