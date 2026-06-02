@@ -10,7 +10,7 @@
   h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: #1a1a1a; }
   .subtitle { font-size: 13px; color: #888; margin-bottom: 24px; }
   .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 20px; max-width: 860px; margin: 0 auto; }
-  .clock-btns { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 8px; }
+  .clock-btns { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-bottom: 8px; }
   .clock-btn { padding: 7px 4px; border: 2px solid #e8e8e8; border-radius: 8px; background: #f4f4f2; color: #666; font-size: 11px; cursor: pointer; text-align: center; line-height: 1.3; font-family: inherit; }
   .clock-btn .btn-price { font-size: 12px; display: block; margin-top: 2px; }
   .clock-btn[data-active="true"] { background: #185FA5; color: #fff; border-color: #185FA5; font-weight: 700; }
@@ -104,7 +104,7 @@
   .print-section .sig-block { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
   .print-section .sig-line { border-top: 1px solid #333; padding-top: 4px; color: #666; font-size: 11px; }
   @media (max-width: 600px) {
-    .clock-btns { grid-template-columns: repeat(3, 1fr); }
+    .clock-btns { grid-template-columns: repeat(4, 1fr); }
     .sliders { grid-template-columns: 1fr; }
     .bar-label { width: 140px; }
   }
@@ -234,6 +234,8 @@ const DEFAULTS = [
   { name: '5-ft no river', short: '5ft\nno river', body: 480, sledCost: 85, assyShip: 140, factor: 2.3 },
   { name: '5-ft surface',  short: '5ft\nsurface',  body: 575, sledCost: 85, assyShip: 140, factor: 2.7 },
   { name: '5-ft through',  short: '5ft\nthrough',  body: 775, sledCost: 85, assyShip: 140, factor: 3.0 },
+  { name: 'RTA 3-ft Claret', short: 'RTA 3ft\nClaret',  body: 100, sledCost: 85, assyShip: 25,  factor: 2.0 },
+  { name: 'RTA 5-ft Claret', short: 'RTA 5ft\nClaret',  body: 150, sledCost: 85, assyShip: 25,  factor: 2.0 },
 ];
 
 let clocks = DEFAULTS.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.assyShip) * c.factor) }));
