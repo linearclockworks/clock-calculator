@@ -248,7 +248,12 @@ async function loadPricing() {
     const r = await fetch('/api/pricing');
     const data = await r.json();
     if (data.exists && data.clocks) {
-      clocks = data.clocks.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.assyShip) * c.factor) }));
+      const saved = data.clocks.map(c => ({ ...c, price: round50((c.body + c.sledCost + c.assyShip) * c.factor) }));
+      // Merge: use saved values where name matches, fall back to defaults for new clock types
+      clocks = DEFAULTS.map(d => {
+        const match = saved.find(s => s.name === d.name);
+        return match ? match : { ...d, price: round50((d.body + d.sledCost + d.assyShip) * d.factor) };
+      });
       currentSha = data.sha;
       if (data.savedAt) {
         const d = new Date(data.savedAt);
