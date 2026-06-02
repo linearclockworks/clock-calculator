@@ -420,8 +420,8 @@ function update() {
   const c = clocks[activeIdx];
   const tedKeep1 = parseInt(document.getElementById('fra-keep1').value) / 100;
   const tedKeep2 = parseInt(document.getElementById('fra-keep2').value) / 100;
-  document.getElementById('v-ted-keep1').textContent = Math.round(tedKeep1*100) + '%';
-  document.getElementById('v-ted-keep2').textContent = Math.round(tedKeep2*100) + '%';
+  document.getElementById('v-fra-keep1').textContent = Math.round(tedKeep1*100) + '%';
+  document.getElementById('v-fra-keep2').textContent = Math.round(tedKeep2*100) + '%';
   document.getElementById('clock-meta').textContent = 'Price ' + fmt(c.price) + '  ·  Body fee ' + fmt(c.body) + '  ·  Factor ' + c.factor + '×';
 
   const max = c.price;
