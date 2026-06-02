@@ -6,8 +6,8 @@
       "body": 325,
       "sledCost": 85,
       "assyShip": 140,
-      "factor": 2.3,
-      "price": 1250
+      "factor": 2.23,
+      "price": 1225
     },
     {
       "name": "3-ft surface",
@@ -15,8 +15,8 @@
       "body": 350,
       "sledCost": 85,
       "assyShip": 140,
-      "factor": 2.5,
-      "price": 1450
+      "factor": 3.22,
+      "price": 1850
     },
     {
       "name": "3-ft through",
@@ -24,8 +24,8 @@
       "body": 500,
       "sledCost": 85,
       "assyShip": 140,
-      "factor": 2.7,
-      "price": 1950
+      "factor": 3.03,
+      "price": 2200
     },
     {
       "name": "5-ft no river",
@@ -33,8 +33,8 @@
       "body": 480,
       "sledCost": 85,
       "assyShip": 140,
-      "factor": 2.3,
-      "price": 1600
+      "factor": 2.2,
+      "price": 1550
     },
     {
       "name": "5-ft surface",
@@ -42,8 +42,8 @@
       "body": 575,
       "sledCost": 85,
       "assyShip": 140,
-      "factor": 2.5,
-      "price": 2000
+      "factor": 2.69,
+      "price": 2150
     },
     {
       "name": "5-ft through",
@@ -51,10 +51,10 @@
       "body": 775,
       "sledCost": 85,
       "assyShip": 140,
-      "factor": 2.7,
-      "price": 2700
+      "factor": 2.65,
+      "price": 2650
     }
   ],
-  "savedAt": "2026-05-31T17:02:59.515Z",
-  "message": "lower factors on rivers"
+  "savedAt": "2026-06-02T12:09:39.718Z",
+  "message": "sync with current pricing guide"
 }
