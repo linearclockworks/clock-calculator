@@ -195,8 +195,7 @@
   <div class="divider"></div>
 
   <div class="group">
-    <div class="group-lbl fra-lbl">Partner's gross</div>
-    <div class="legend"><span class="legend-line"></span> white line = Partner's break-even (body + assy + ship)</div>
+    <div class="group-lbl fra-lbl">Partner's net</div>
     <div class="bar-row">
       <div class="bar-label"><div class="bar-label-main">Reference — old model</div><div class="bar-label-sub">Body fee only, no assy/ship</div></div>
       <div class="bar-track" onclick="showPopup('a-fra')"><div class="bar-fill bar-ted" id="bar-a-fra"></div></div>
@@ -422,29 +421,28 @@ function update() {
     'Price ' + fmt(c.price) + '  ·  Body fee ' + fmt(c.body) + '  ·  Sled (LCW) ' + fmt(c.sledCost) + '  ·  Factor ' + c.factor + '×';
 
   const max = c.price;
-  // Partner's break-even = body + assy + ship (sled is NOT their cost)
-  const partnerBreakEven = c.body + c.assyShip;
-  // Reference scenario: LCW does everything (old model)
+  // Reference: LCW does everything
   const allCosts = c.body + c.sledCost + c.assyShip;
   const youRef = c.price - allCosts;
 
-  // Scenario A: partner gets their % of sale price; LCW gets remainder minus sled
-  const p1 = Math.round(c.price * partnerKeep1);
-  const youA = (c.price - p1) - c.sledCost;
-
-  // Scenario B: partner gets higher %; LCW gets remainder minus sled
-  const p2 = Math.round(c.price * partnerKeep2);
-  const youB = (c.price - p2) - c.sledCost;
+  // Scenario A/B: partner gross = price * pct, partner net = gross - body - assy
+  const p1gross = Math.round(c.price * partnerKeep1);
+  const p2gross = Math.round(c.price * partnerKeep2);
+  const p1net   = p1gross - c.body - c.assyShip;
+  const p2net   = p2gross - c.body - c.assyShip;
+  const youA    = (c.price - p1gross) - c.sledCost;
+  const youB    = (c.price - p2gross) - c.sledCost;
 
   setBar('bar-a-you', youRef, max);
   setBar('bar-b-you', youA, max);
   setBar('bar-c-you', youB, max);
-  // Partner bars
-  setBar('bar-a-fra', c.body, max);   // reference: body fee only (old)
-  setBar('bar-b-fra', p1, max);
-  setBar('bar-c-fra', p2, max);
-  setMarker('marker-b', partnerBreakEven, max);
-  setMarker('marker-c', partnerBreakEven, max);
+  // Partner bars show net (what they actually keep)
+  setBar('bar-a-fra', c.body, max);
+  setBar('bar-b-fra', Math.max(0, p1net), max);
+  setBar('bar-c-fra', Math.max(0, p2net), max);
+  // No break-even marker needed in new model — remove
+  document.getElementById('marker-b').style.left = '0%';
+  document.getElementById('marker-c').style.left = '0%';
 
   document.querySelectorAll('[id^="pt-row-"]').forEach((r, i) => {
     r.classList.toggle('active-row', i === activeIdx);
@@ -456,40 +454,39 @@ function update() {
       { lbl: 'Body fee paid to partner', amt: '−' + fmt(c.body) },
       { lbl: 'Sled cost (LCW)', amt: '−' + fmt(c.sledCost) },
       { lbl: 'Assembly + shipping (LCW)', amt: '−' + fmt(c.assyShip) },
-      { lbl: 'LCW net profit', amt: fmt(youRef), total: true, you: true },
+      { lbl: 'LCW net', amt: fmt(youRef), total: true, you: true },
     ]},
-    'b-you': { title: 'Scenario A — LCW website customer', sub: 'Partner builds, assembles + ships. Sled from LCW\'s share.', rows: [
+    'b-you': { title: 'Scenario A — LCW website customer', sub: 'Partner gets ' + Math.round(partnerKeep1*100) + '% of sale; covers all their costs from it', rows: [
       { lbl: 'Sale price', amt: fmt(c.price) },
-      { lbl: 'Partner\'s share (' + Math.round(partnerKeep1*100) + '%)', amt: '−' + fmt(p1) },
-      { lbl: 'LCW gross share', amt: fmt(c.price - p1) },
+      { lbl: 'Partner\'s share (' + Math.round(partnerKeep1*100) + '%)', amt: '−' + fmt(p1gross) },
+      { lbl: 'LCW gross share', amt: fmt(c.price - p1gross) },
       { lbl: 'Sled cost (LCW absorbs)', amt: '−' + fmt(c.sledCost) },
-      { lbl: 'LCW net profit', amt: fmt(youA), total: true, you: true },
+      { lbl: 'LCW net', amt: fmt(youA), total: true, you: true },
     ]},
-    'c-you': { title: 'Scenario B — Partner\'s customer', sub: 'Partner sources customer, builds + ships. Sled from LCW\'s share.', rows: [
+    'c-you': { title: 'Scenario B — Partner\'s customer', sub: 'Partner gets ' + Math.round(partnerKeep2*100) + '% of sale; covers all their costs from it', rows: [
       { lbl: 'Sale price', amt: fmt(c.price) },
-      { lbl: 'Partner\'s share (' + Math.round(partnerKeep2*100) + '%)', amt: '−' + fmt(p2) },
-      { lbl: 'LCW gross share', amt: fmt(c.price - p2) },
+      { lbl: 'Partner\'s share (' + Math.round(partnerKeep2*100) + '%)', amt: '−' + fmt(p2gross) },
+      { lbl: 'LCW gross share', amt: fmt(c.price - p2gross) },
       { lbl: 'Sled cost (LCW absorbs)', amt: '−' + fmt(c.sledCost) },
-      { lbl: 'LCW net profit', amt: fmt(youB), total: true, you: true },
+      { lbl: 'LCW net', amt: fmt(youB), total: true, you: true },
     ]},
-    'a-fra': { title: 'Reference — old model', sub: 'Body fee only, no assembly or shipping', rows: [
+    'a-fra': { title: 'Reference — old model', sub: 'Body fee only; LCW pays assy + ship', rows: [
       { lbl: 'Body fee received', amt: fmt(c.body) },
-      { lbl: 'No sled cost to partner', amt: '$0' },
-      { lbl: 'Partner gross', amt: fmt(c.body), total: true, you: false },
+      { lbl: 'Partner net', amt: fmt(c.body), total: true, you: false },
     ]},
-    'b-fra': { title: 'Scenario A — LCW website customer', sub: 'Partner builds, assembles + ships; no sled cost', rows: [
-      { lbl: 'Body + materials + labor', amt: fmt(c.body) },
-      { lbl: 'Assembly + shipping', amt: fmt(c.assyShip) },
-      { lbl: 'Above break-even', amt: fmt(p1 - partnerBreakEven) },
-      { lbl: 'No sled cost to partner', amt: '$0' },
-      { lbl: 'Partner gross (' + Math.round(partnerKeep1*100) + '% of sale)', amt: fmt(p1), total: true, you: false },
+    'b-fra': { title: 'Scenario A — LCW website customer', sub: 'Partner gets ' + Math.round(partnerKeep1*100) + '% of sale, pays own costs', rows: [
+      { lbl: 'Gross share (' + Math.round(partnerKeep1*100) + '% of sale)', amt: fmt(p1gross) },
+      { lbl: 'Less: body + materials', amt: '−' + fmt(c.body) },
+      { lbl: 'Less: assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Sled — LCW cost', amt: '$0' },
+      { lbl: 'Partner net', amt: fmt(p1net), total: true, you: false },
     ]},
-    'c-fra': { title: 'Scenario B — Partner\'s customer', sub: 'Partner sources customer, builds + ships; no sled cost', rows: [
-      { lbl: 'Body + materials + labor', amt: fmt(c.body) },
-      { lbl: 'Assembly + shipping', amt: fmt(c.assyShip) },
-      { lbl: 'Above break-even', amt: fmt(p2 - partnerBreakEven) },
-      { lbl: 'No sled cost to partner', amt: '$0' },
-      { lbl: 'Partner gross (' + Math.round(partnerKeep2*100) + '% of sale)', amt: fmt(p2), total: true, you: false },
+    'c-fra': { title: 'Scenario B — Partner\'s customer', sub: 'Partner gets ' + Math.round(partnerKeep2*100) + '% of sale, pays own costs', rows: [
+      { lbl: 'Gross share (' + Math.round(partnerKeep2*100) + '% of sale)', amt: fmt(p2gross) },
+      { lbl: 'Less: body + materials', amt: '−' + fmt(c.body) },
+      { lbl: 'Less: assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Sled — LCW cost', amt: '$0' },
+      { lbl: 'Partner net', amt: fmt(p2net), total: true, you: false },
     ]},
   };
 }
@@ -558,13 +555,15 @@ function printAgreement() {
 
   let scenarioRows = clocks.map(c => {
     const allCosts = c.body + c.sledCost + c.assyShip;
-    const p1 = Math.round(c.price * partnerKeep1 / 100);
-    const p2 = Math.round(c.price * partnerKeep2 / 100);
-    const youRef = c.price - allCosts;
-    const youA = (c.price - p1) - c.sledCost;
-    const youB = (c.price - p2) - c.sledCost;
-    const d1 = p1 - c.body;
-    const d2 = p2 - c.body;
+    const p1gross = Math.round(c.price * partnerKeep1 / 100);
+    const p2gross = Math.round(c.price * partnerKeep2 / 100);
+    const p1net   = p1gross - c.body - c.assyShip;
+    const p2net   = p2gross - c.body - c.assyShip;
+    const youRef  = c.price - allCosts;
+    const youA    = (c.price - p1gross) - c.sledCost;
+    const youB    = (c.price - p2gross) - c.sledCost;
+    const d1 = p1net - c.body;
+    const d2 = p2net - c.body;
     const diff = (d) => d >= 0 ? `<span style="color:#0a7a3e;font-size:10px;"> (+${Math.round(d).toLocaleString()})</span>`
                                 : `<span style="color:#c0392b;font-size:10px;"> (${Math.round(d).toLocaleString()})</span>`;
     return `
@@ -573,9 +572,9 @@ function printAgreement() {
       <td>${fmt(c.price)}</td>
       <td><span class="ted">${fmt(c.body)}</span></td>
       <td><span class="you">${fmt(youA)}</span></td>
-      <td><span class="ted">${fmt(p1)}</span>${diff(d1)}</td>
+      <td><span class="ted">${fmt(p1net)}</span>${diff(d1)}</td>
       <td><span class="you">${fmt(youB)}</span></td>
-      <td><span class="ted">${fmt(p2)}</span>${diff(d2)}</td>
+      <td><span class="ted">${fmt(p2net)}</span>${diff(d2)}</td>
     </tr>`;
   }).join('');
 
@@ -609,9 +608,9 @@ function printAgreement() {
       </tr>
       <tr>
         <th></th><th></th>
-        <th>Partner gross</th>
-        <th>LCW net</th><th>Partner gross</th>
-        <th>LCW net</th><th>Partner gross</th>
+        <th>Partner net</th>
+        <th>LCW net</th><th>Partner net</th>
+        <th>LCW net</th><th>Partner net</th>
       </tr></thead>
       <tbody>${scenarioRows}</tbody>
     </table>
