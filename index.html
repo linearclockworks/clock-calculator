@@ -428,8 +428,8 @@ function update() {
   // Scenario A/B: partner gross = price * pct, partner net = gross - body - assy
   const p1gross = Math.round(c.price * partnerKeep1);
   const p2gross = Math.round(c.price * partnerKeep2);
-  const p1net   = p1gross - c.body - c.assyShip;
-  const p2net   = p2gross - c.body - c.assyShip;
+  const p1net   = p1gross - c.assyShip;   // only new cost vs current is assy+ship
+  const p2net   = p2gross - c.assyShip;
   const youA    = (c.price - p1gross) - c.sledCost;
   const youB    = (c.price - p2gross) - c.sledCost;
 
@@ -474,17 +474,15 @@ function update() {
       { lbl: 'Body fee received', amt: fmt(c.body) },
       { lbl: 'Partner net', amt: fmt(c.body), total: true, you: false },
     ]},
-    'b-fra': { title: 'Scenario A — LCW website customer', sub: 'Partner gets ' + Math.round(partnerKeep1*100) + '% of sale, pays own costs', rows: [
+    'b-fra': { title: 'Scenario A — LCW website customer', sub: 'Partner gets ' + Math.round(partnerKeep1*100) + '% of sale; now also pays assy + ship', rows: [
       { lbl: 'Gross share (' + Math.round(partnerKeep1*100) + '% of sale)', amt: fmt(p1gross) },
-      { lbl: 'Less: body + materials', amt: '−' + fmt(c.body) },
-      { lbl: 'Less: assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Less: assembly + shipping (new cost)', amt: '−' + fmt(c.assyShip) },
       { lbl: 'Sled — LCW cost', amt: '$0' },
       { lbl: 'Partner net', amt: fmt(p1net), total: true, you: false },
     ]},
-    'c-fra': { title: 'Scenario B — Partner\'s customer', sub: 'Partner gets ' + Math.round(partnerKeep2*100) + '% of sale, pays own costs', rows: [
+    'c-fra': { title: 'Scenario B — Partner\'s customer', sub: 'Partner gets ' + Math.round(partnerKeep2*100) + '% of sale; now also pays assy + ship', rows: [
       { lbl: 'Gross share (' + Math.round(partnerKeep2*100) + '% of sale)', amt: fmt(p2gross) },
-      { lbl: 'Less: body + materials', amt: '−' + fmt(c.body) },
-      { lbl: 'Less: assembly + shipping', amt: '−' + fmt(c.assyShip) },
+      { lbl: 'Less: assembly + shipping (new cost)', amt: '−' + fmt(c.assyShip) },
       { lbl: 'Sled — LCW cost', amt: '$0' },
       { lbl: 'Partner net', amt: fmt(p2net), total: true, you: false },
     ]},
@@ -557,8 +555,8 @@ function printAgreement() {
     const allCosts = c.body + c.sledCost + c.assyShip;
     const p1gross = Math.round(c.price * partnerKeep1 / 100);
     const p2gross = Math.round(c.price * partnerKeep2 / 100);
-    const p1net   = p1gross - c.body - c.assyShip;
-    const p2net   = p2gross - c.body - c.assyShip;
+    const p1net   = p1gross - c.assyShip;
+    const p2net   = p2gross - c.assyShip;
     const youRef  = c.price - allCosts;
     const youA    = (c.price - p1gross) - c.sledCost;
     const youB    = (c.price - p2gross) - c.sledCost;
