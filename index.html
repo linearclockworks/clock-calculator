@@ -563,15 +563,19 @@ function printAgreement() {
     const youRef = c.price - allCosts;
     const youA = (c.price - p1) - c.sledCost;
     const youB = (c.price - p2) - c.sledCost;
+    const d1 = p1 - c.body;
+    const d2 = p2 - c.body;
+    const diff = (d) => d >= 0 ? `<span style="color:#0a7a3e;font-size:10px;"> (+${Math.round(d).toLocaleString()})</span>`
+                                : `<span style="color:#c0392b;font-size:10px;"> (${Math.round(d).toLocaleString()})</span>`;
     return `
     <tr>
       <td>${c.name}</td>
       <td>${fmt(c.price)}</td>
       <td><span class="ted">${fmt(c.body)}</span></td>
       <td><span class="you">${fmt(youA)}</span></td>
-      <td><span class="ted">${fmt(p1)}</span> (${partnerKeep1}%)</td>
+      <td><span class="ted">${fmt(p1)}</span>${diff(d1)}</td>
       <td><span class="you">${fmt(youB)}</span></td>
-      <td><span class="ted">${fmt(p2)}</span> (${partnerKeep2}%)</td>
+      <td><span class="ted">${fmt(p2)}</span>${diff(d2)}</td>
     </tr>`;
   }).join('');
 
