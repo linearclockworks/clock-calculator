@@ -85,7 +85,8 @@
   @media print {
     body { background: #fff; padding: 0; }
     .card { border: none; box-shadow: none; max-width: 100%; }
-    .clock-btns, .sliders, .hint, .pricing-toggle, .pricing-panel, .chart, .footer, h1, .subtitle, .clock-meta, .saved-at { display: none !important; }
+    * { display: none !important; }
+    .print-section, .print-section * { display: revert !important; }
     .print-section { display: block !important; }
   }
   .print-section { display: none; font-size: 12px; }
