@@ -567,6 +567,7 @@ function printAgreement() {
     <tr>
       <td>${c.name}</td>
       <td>${fmt(c.price)}</td>
+      <td><span class="ted">${fmt(c.body)}</span></td>
       <td><span class="you">${fmt(youA)}</span></td>
       <td><span class="ted">${fmt(p1)}</span> (${partnerKeep1}%)</td>
       <td><span class="you">${fmt(youB)}</span></td>
@@ -597,11 +598,13 @@ function printAgreement() {
       <thead><tr>
         <th>Clock</th>
         <th>Sale price</th>
+        <th>Current<br><span style="font-weight:400;font-size:10px;">LCW does all</span></th>
         <th colspan="2">Scenario A — LCW customer</th>
         <th colspan="2">Scenario B — Partner's customer</th>
       </tr>
       <tr>
         <th></th><th></th>
+        <th>Partner gross</th>
         <th>LCW net</th><th>Partner gross</th>
         <th>LCW net</th><th>Partner gross</th>
       </tr></thead>
